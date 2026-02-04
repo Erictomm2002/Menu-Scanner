@@ -1,12 +1,12 @@
 export interface MenuItem {
-  id?: string; // Made optional
+  id: string; // Made optional
   name: string;
   price: string;
   description?: string;
 }
 
 export interface MenuCategory {
-  id?: string; // Made optional
+  id: string; // Made optional
   categoryName: string;
   items: MenuItem[];
 }
