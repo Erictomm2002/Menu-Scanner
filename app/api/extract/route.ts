@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { extractMenuFromImage } from "../../../libs/gemini-client";
 
+export const runtime = 'nodejs'; // hoặc 'edge'
+export const maxDuration = 30; // timeout tối đa (giây)
+
 export async function POST(request: NextRequest) {
   try {
     const formData = await request.formData();

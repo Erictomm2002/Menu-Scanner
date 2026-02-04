@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { generateCategoryExcel } from "../../../libs/excel-category-generator";
 
+export const runtime = 'nodejs'; // hoặc 'edge'
+export const maxDuration = 30; // timeout tối đa (giây)
+
 export async function POST(request: NextRequest) {
   try {
     const menuData = await request.json();

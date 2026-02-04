@@ -84,7 +84,6 @@ export async function extractMenuFromImage(
   } catch (error) {
     console.error("Gemini API Error:", error);
 
-    console.error("Gemini API Error:", error.errorDetails);
     throw new Error(
       "Không thể phân tích menu. Vui lòng thử lại với ảnh rõ hơn.",
     );
