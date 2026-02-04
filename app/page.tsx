@@ -4,9 +4,22 @@ import { useState, useEffect } from "react"
 import MenuUploadScreen from "../components/page-component/MenuUploadScreen"
 import MenuEditScreen from "../components/page-component/MenuEditScreen"
 import MenuExportScreen from "../components/page-component/MenuExportScreen"
-import { MenuData, MenuItem } from "@/types/menu"
+import { MenuData, MenuCategory } from "@/types/menu"
 
 type AppStep = "upload" | "edit" | "export"
+
+// Helper function to generate a URL-friendly slug from a string
+const slugify = (text: string): string => {
+  return text
+    .toString()
+    .normalize("NFD") // split an accented letter in the base letter and the acent
+    .replace(/[\u0300-\u036f]/g, "") // remove all previously split accents
+    .toLowerCase()
+    .trim()
+    .replace(/\s+/g, "-") // replace spaces with -
+    .replace(/[^\w-]+/g, "") // remove all non-word chars
+    .replace(/--+/g, "-") // replace multiple - with single -
+}
 
 export default function Home() {
   // Khôi phục state từ localStorage khi component mount
@@ -84,7 +97,7 @@ export default function Home() {
         }
 
         if (data.categories) {
-          data.categories.forEach((newCategory: any) => {
+          data.categories.forEach((newCategory: MenuCategory) => {
             const existingCategory = combinedMenuData.categories.find(
               (c) => c.categoryName === newCategory.categoryName,
             )
@@ -92,12 +105,28 @@ export default function Home() {
               // Gộp items vào category đã có
               existingCategory.items.push(...newCategory.items)
             } else {
-              // Thêm category mới
+              // Thêm category mới và tạo ID
+              const newId = slugify(newCategory.categoryName)
+              // Check for duplicate slugs and append a number if needed
+              let finalId = newId
+              let counter = 1
+              while (combinedMenuData.categories.some((c) => c.id === finalId)) {
+                finalId = `${newId}-${counter}`
+                counter++
+              }
+              newCategory.id = finalId
               combinedMenuData.categories.push(newCategory)
             }
           })
         }
       }
+
+      // Final processing: Assign sequential IDs to all items within their categories
+      combinedMenuData.categories.forEach((category) => {
+        category.items.forEach((item, index) => {
+          item.id = `item_${index + 1}`
+        })
+      })
 
       setMenuData(combinedMenuData)
       setCurrentStep("edit")
