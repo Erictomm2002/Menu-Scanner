@@ -26,6 +26,10 @@ export default function Home() {
   const [currentStep, setCurrentStep] = useState<AppStep>(() => {
     if (typeof window !== "undefined") {
       const saved = localStorage.getItem("menuApp_currentStep")
+      // If the user reloads on the export page, reset to the upload page.
+      if (saved === "export") {
+        return "upload"
+      }
       return (saved as AppStep) || "upload"
     }
     return "upload"
