@@ -1,12 +1,13 @@
 "use client";
 
 import type React from "react";
+import { useState } from "react";
 
 import { Button } from "../ui/Button";
-import { Upload, Loader2 } from "lucide-react";
+import { Upload, Loader2, FileImage, X } from "lucide-react";
 
 interface MenuUploadScreenProps {
-  onUpload: (file: File) => void;
+  onUpload: (files: File[]) => void;
   loading: boolean;
 }
 
@@ -14,32 +15,46 @@ export default function MenuUploadScreen({
   onUpload,
   loading,
 }: MenuUploadScreenProps) {
-  const handleFileChange = (file: File | null) => {
-    if (!file) return;
+  const [files, setFiles] = useState<File[]>([]);
 
-    // Kiểm tra định dạng file
-    if (!file.type.startsWith("image/")) {
-      alert("⚠️ Vui lòng chọn file ảnh (JPG, PNG, WEBP...)");
-      return;
-    }
+  const handleFileChange = (selectedFiles: FileList | null) => {
+    if (!selectedFiles) return;
 
-    // Kiểm tra dung lượng file (tối đa 10MB)
-    if (file.size > 10 * 1024 * 1024) {
-      alert("⚠️ Ảnh quá lớn! Vui lòng chọn ảnh nhỏ hơn 10MB");
-      return;
-    }
+    const newFiles = Array.from(selectedFiles);
+    const allFiles = [...files, ...newFiles].slice(0, 3); // Giới hạn 3 files
 
-    // Tạo preview (nếu cần)
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
+    // Lọc và kiểm tra file
+    const validatedFiles = allFiles.filter(file => {
+      if (!file.type.startsWith("image/")) {
+        alert(`⚠️ File '${file.name}' không phải là ảnh và sẽ bị bỏ qua.`);
+        return false;
+      }
+      if (file.size > 10 * 1024 * 1024) {
+        alert(`⚠️ Ảnh '${file.name}' quá lớn (> 10MB) và sẽ bị bỏ qua.`);
+        return false;
+      }
+      return true;
+    });
 
-    // Upload
-    onUpload(file);
+    setFiles(validatedFiles);
+  };
+
+  const handleRemoveFile = (index: number) => {
+    setFiles(files.filter((_, i) => i !== index));
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    handleFileChange(file || null);
+    handleFileChange(e.target.files);
+    // Reset input để có thể chọn lại file giống nhau
+    e.target.value = "";
+  };
+
+  const handleUploadClick = () => {
+    if (files.length === 0) {
+      alert("Vui lòng chọn ít nhất 1 ảnh để tải lên.");
+      return;
+    }
+    onUpload(files);
   };
 
   return (
@@ -58,42 +73,79 @@ export default function MenuUploadScreen({
         </div>
 
         <div
-          className="border-2 border-dashed rounded-xl p-12 text-center transition-colors border-border bg-muted/30"
+          className="border-2 border-dashed rounded-xl p-8 text-center transition-colors border-border bg-muted/30"
         >
           <Upload className="w-16 h-16 mx-auto mb-4 text-primary" />
           <h2 className="text-xl font-semibold mb-2 text-foreground">
-            {loading ? "Đang xử lý thực đơn của bạn..." : "Tải ảnh thực đơn lên"}
+            {loading ? "Đang xử lý thực đơn của bạn..." : "Tải lên tối đa 3 ảnh thực đơn"}
           </h2>
           <p className="text-muted-foreground mb-6">
             {loading
               ? "AI đang phân tích thực đơn. Vui lòng chờ trong giây lát..."
-              : "Bấm để chọn ảnh thực đơn (JPG, PNG, WEBP...). Ảnh rõ nét sẽ cho kết quả tốt nhất"}
+              : "Bấm để chọn ảnh (JPG, PNG, WEBP...). Ảnh rõ nét sẽ cho kết quả tốt nhất."}
           </p>
 
-          {loading && (
+          {loading ? (
             <div className="flex justify-center mb-4">
               <Loader2 className="w-6 h-6 animate-spin text-primary" />
             </div>
+          ) : (
+            <>
+              <input
+                type="file"
+                accept="image/*"
+                multiple
+                onChange={handleInputChange}
+                disabled={loading || files.length >= 3}
+                className="hidden"
+                id="file-input"
+              />
+              <label htmlFor="file-input">
+                <Button
+                  type="button"
+                  onClick={() => document.getElementById("file-input")?.click()}
+                  disabled={loading || files.length >= 3}
+                  className="bg-primary hover:bg-primary/90 text-primary-foreground mb-4"
+                >
+                  Chọn ảnh
+                </Button>
+              </label>
+            </>
           )}
 
-          <input
-            type="file"
-            accept="image/*"
-            onChange={handleInputChange}
-            disabled={loading}
-            className="hidden"
-            id="file-input"
-          />
-          <label htmlFor="file-input">
+          {files.length > 0 && !loading && (
+            <div className="mt-4 text-left">
+              <h3 className="font-semibold mb-2">Ảnh đã chọn:</h3>
+              <div className="space-y-2">
+                {files.map((file, index) => (
+                  <div key={index} className="flex items-center justify-between bg-muted p-2 rounded-md">
+                    <div className="flex items-center gap-2">
+                      <FileImage className="w-5 h-5 text-muted-foreground" />
+                      <span className="text-sm font-medium">{file.name}</span>
+                    </div>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => handleRemoveFile(index)}
+                    >
+                      <X className="w-4 h-4" />
+                    </Button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {files.length > 0 && (
             <Button
               type="button"
-              onClick={() => document.getElementById("file-input")?.click()}
+              onClick={handleUploadClick}
               disabled={loading}
-              className="bg-primary hover:bg-primary/90 text-primary-foreground"
+              className="mt-6 w-full bg-green-600 hover:bg-green-700 text-white"
             >
-              {loading ? "Đang xử lý..." : "Chọn ảnh"}
+              {loading ? "Đang xử lý..." : `Bắt đầu xử lý ${files.length} ảnh`}
             </Button>
-          </label>
+          )}
         </div>
 
         <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6">

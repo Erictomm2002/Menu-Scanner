@@ -8,7 +8,7 @@ Phân tích ảnh menu quán ăn này và trích xuất thông tin theo định 
   "restaurantName": "tên quán (nếu có)",
   "categories": [
     {
-      "id": "ký tự viết tắt (VD: Trà sữa->TS, Món chính->MC, Coffee->CF)",
+      "id": "ký tự viết tắt (VD: Trà sữa->TS, Món chính->MC, Coffee->CF) nếu trung nhau thì thêm số vào sau (VD: CF1, CF2)",
       "categoryName": "tên nhóm",
       "items": [
         {
@@ -23,7 +23,7 @@ Phân tích ảnh menu quán ăn này và trích xuất thông tin theo định 
 }
 
 YÊU CẦU:
-1 Category id: Viết tắt chữ cái đầu mỗi từ, viết hoa, unique
+1 Category id: Viết tắt chữ cái đầu mỗi từ, viết hoa, unique. 
 2. Item id: Tăng dần item_1, item_2...
 3. Trả về CHỈ JSON thuần túy, KHÔNG có markdown (\`\`\`json), KHÔNG có text giải thích
 4. Nếu không thấy giá tiền, để giá về 0
@@ -31,7 +31,7 @@ YÊU CẦU:
 6. Giữ nguyên ngôn ngữ trong menu, nếu menu có cả tiếng việt và tiếng anh cho mỗi món thì ưu tiên tiếng anh
 7. Đọc kỹ toàn bộ menu, không bỏ sót món nào
 8. Nếu một món có 2 giá, hãy tạo ra 2 món mới với tên theo format "tên món (size 1)" và "tên món (size 2), nếu không có thông tin về size, hãy dùng cấu trúc tên món = "tên món + giá món". Vd: Trà sữa 15
-9. Gía để dạng số nguyên như 50000, ...
+9. Gía để dạng số nguyên như 50000. Nếu giá chỉ ghi ví dụ như 120 thay vì 120000 thì hãy thêm 3 số 0 vào sau (120 -> 120000)
 Hãy phân tích ảnh và trả về JSON
 `;
 

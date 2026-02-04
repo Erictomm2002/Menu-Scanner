@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 import MenuUploadScreen from "../components/page-component/MenuUploadScreen"
 import MenuEditScreen from "../components/page-component/MenuEditScreen"
 import MenuExportScreen from "../components/page-component/MenuExportScreen"
-import { MenuData } from "@/types/menu"
+import { MenuData, MenuItem } from "@/types/menu"
 
 type AppStep = "upload" | "edit" | "export"
 
@@ -50,31 +50,60 @@ export default function Home() {
     setCurrentStep("export")
   }
 
-  const handleImageUpload = async (file: File) => {
+  const handleImageUpload = async (files: File[]) => {
     setLoading(true)
     setError(null)
+    let combinedMenuData: MenuData = {
+      restaurantName: "",
+      categories: [],
+    }
 
     try {
-      const formData = new FormData()
-      formData.append("image", file)
+      for (const file of files) {
+        const formData = new FormData()
+        formData.append("image", file)
 
-      const response = await fetch("/api/extract", {
-        method: "POST",
-        body: formData,
-      })
+        const response = await fetch("/api/extract", {
+          method: "POST",
+          body: formData,
+        })
 
-      const data = await response.json()
+        const data = await response.json()
 
-      if (!response.ok) {
-        throw new Error(data.error || "Failed to extract menu")
+        if (!response.ok) {
+          throw new Error(
+            `Lỗi xử lý ảnh ${file.name}: ${data.error || "Failed to extract menu"}`,
+          )
+        }
+
+        console.log(`Extracted menu data from ${file.name}:`, data)
+
+        // Gộp dữ liệu
+        if (data.restaurantName && !combinedMenuData.restaurantName) {
+          combinedMenuData.restaurantName = data.restaurantName
+        }
+
+        if (data.categories) {
+          data.categories.forEach((newCategory: any) => {
+            const existingCategory = combinedMenuData.categories.find(
+              (c) => c.categoryName === newCategory.categoryName,
+            )
+            if (existingCategory) {
+              // Gộp items vào category đã có
+              existingCategory.items.push(...newCategory.items)
+            } else {
+              // Thêm category mới
+              combinedMenuData.categories.push(newCategory)
+            }
+          })
+        }
       }
 
-      console.log("Extracted menu data:", data)
-      setMenuData(data)
+      setMenuData(combinedMenuData)
       setCurrentStep("edit")
-    } catch (err) {
+    } catch (err: any) {
       console.error("Error:", err)
-      setError("Lỗi phân tích menu. Vui lòng thử lại với ảnh rõ hơn.")
+      setError(err.message || "Lỗi phân tích menu. Vui lòng thử lại.")
     } finally {
       setLoading(false)
     }
