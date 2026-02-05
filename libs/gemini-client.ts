@@ -40,7 +40,7 @@ export async function extractMenuFromImage(
 
   // Sử dụng model Gemini 1.5 Flash (miễn phí, nhanh)
   const model = genAI.getGenerativeModel({
-    model: "gemini-2.5-flash-lite",
+    model: "gemini-2.5-flash",
     generationConfig: {
       temperature: 0.4,
       topK: 32,
