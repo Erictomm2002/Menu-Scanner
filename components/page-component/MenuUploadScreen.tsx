@@ -7,7 +7,7 @@ import { Button } from "../ui/Button";
 import { Upload, Loader2, FileImage, X } from "lucide-react";
 
 interface MenuUploadScreenProps {
-  onUpload: (files: File[]) => void;
+  onUpload: (files: File[], extractionOption: "default" | "base_price") => void;
   loading: boolean;
 }
 
@@ -16,12 +16,13 @@ export default function MenuUploadScreen({
   loading,
 }: MenuUploadScreenProps) {
   const [files, setFiles] = useState<File[]>([]);
+  const [extractionOption, setExtractionOption] = useState<"default" | "base_price">("default");
 
   const handleFileChange = (selectedFiles: FileList | null) => {
     if (!selectedFiles) return;
 
     const newFiles = Array.from(selectedFiles);
-    const allFiles = [...files, ...newFiles].slice(0, 3); // Giới hạn 3 files
+    const allFiles = [...files, ...newFiles].slice(0, 5); // Giới hạn 5 files
 
     // Lọc và kiểm tra file
     const validatedFiles = allFiles.filter(file => {
@@ -29,8 +30,8 @@ export default function MenuUploadScreen({
         alert(`⚠️ File '${file.name}' không phải là ảnh và sẽ bị bỏ qua.`);
         return false;
       }
-      if (file.size > 10 * 1024 * 1024) {
-        alert(`⚠️ Ảnh '${file.name}' quá lớn (> 10MB) và sẽ bị bỏ qua.`);
+      if (file.size > 20 * 1024 * 1024) {
+        alert(`⚠️ Ảnh '${file.name}' quá lớn (> 20MB) và sẽ bị bỏ qua.`);
         return false;
       }
       return true;
@@ -54,7 +55,7 @@ export default function MenuUploadScreen({
       alert("Vui lòng chọn ít nhất 1 ảnh để tải lên.");
       return;
     }
-    onUpload(files);
+    onUpload(files, extractionOption);
   };
 
   return (
@@ -77,7 +78,7 @@ export default function MenuUploadScreen({
         >
           <Upload className="w-16 h-16 mx-auto mb-4 text-primary" />
           <h2 className="text-xl font-semibold mb-2 text-foreground">
-            {loading ? "Đang xử lý thực đơn của bạn..." : "Tải lên tối đa 3 ảnh thực đơn"}
+            {loading ? "Đang xử lý thực đơn của bạn..." : "Tải lên tối đa 5 ảnh thực đơn"}
           </h2>
           <p className="text-muted-foreground mb-6">
             {loading
@@ -96,7 +97,7 @@ export default function MenuUploadScreen({
                 accept="image/*"
                 multiple
                 onChange={handleInputChange}
-                disabled={loading || files.length >= 3}
+                disabled={loading || files.length >= 5}
                 className="hidden"
                 id="file-input"
               />
@@ -104,7 +105,7 @@ export default function MenuUploadScreen({
                 <Button
                   type="button"
                   onClick={() => document.getElementById("file-input")?.click()}
-                  disabled={loading || files.length >= 3}
+                  disabled={loading || files.length >= 5}
                   className="bg-primary hover:bg-primary/90 text-primary-foreground mb-4"
                 >
                   Chọn ảnh
@@ -132,6 +133,46 @@ export default function MenuUploadScreen({
                     </Button>
                   </div>
                 ))}
+              </div>
+            </div>
+          )}
+
+          {files.length > 0 && (
+            <div className="mt-4 text-left p-4 border rounded-lg bg-background">
+              <h3 className="font-semibold mb-2">Tùy chọn trích xuất:</h3>
+              <div className="space-y-2">
+                <label className="flex items-start gap-2 cursor-pointer">
+                  <input
+                    type="radio"
+                    name="extractionOption"
+                    value="default"
+                    checked={extractionOption === "default"}
+                    onChange={() => setExtractionOption("default")}
+                    className="mt-1"
+                  />
+                  <div>
+                    <span className="font-medium">Chi tiết (Mặc định)</span>
+                    <p className="text-sm text-muted-foreground">
+                      Tách riêng từng biến thể giá/size (VD: Café S, Café L)
+                    </p>
+                  </div>
+                </label>
+                <label className="flex items-start gap-2 cursor-pointer">
+                  <input
+                    type="radio"
+                    name="extractionOption"
+                    value="base_price"
+                    checked={extractionOption === "base_price"}
+                    onChange={() => setExtractionOption("base_price")}
+                    className="mt-1"
+                  />
+                  <div>
+                    <span className="font-medium">Cơ bản</span>
+                    <p className="text-sm text-muted-foreground">
+                      Chỉ lấy giá thấp nhất làm giá gốc, bỏ qua size
+                    </p>
+                  </div>
+                </label>
               </div>
             </div>
           )}

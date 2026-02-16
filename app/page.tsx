@@ -67,7 +67,10 @@ export default function Home() {
     setCurrentStep("export")
   }
 
-  const handleImageUpload = async (files: File[]) => {
+  const handleImageUpload = async (
+    files: File[],
+    extractionOption: "default" | "base_price" = "default",
+  ) => {
     setLoading(true)
     setError(null)
     let combinedMenuData: MenuData = {
@@ -79,6 +82,7 @@ export default function Home() {
       for (const file of files) {
         const formData = new FormData()
         formData.append("image", file)
+        formData.append("priceOption", extractionOption)
 
         const response = await fetch("/api/extract", {
           method: "POST",

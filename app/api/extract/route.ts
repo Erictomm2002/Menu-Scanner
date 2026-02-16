@@ -24,10 +24,10 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Validate file size (max 10MB)
-    if (file.size > 10 * 1024 * 1024) {
+    // Validate file size (max 20MB)
+    if (file.size > 20 * 1024 * 1024) {
       return NextResponse.json(
-        { error: "Ảnh quá lớn. Vui lòng chọn ảnh nhỏ hơn 10MB" },
+        { error: "Ảnh quá lớn. Vui lòng chọn ảnh nhỏ hơn 20MB" },
         { status: 400 },
       );
     }
@@ -38,15 +38,17 @@ export async function POST(request: NextRequest) {
 
     // Get mime type
     const mimeType = file.type || "image/jpeg";
+    const priceOption = (formData.get("priceOption") as string) || "default";
 
     console.log("Processing image:", {
       name: file.name,
       type: mimeType,
       size: file.size,
+      priceOption,
     });
 
     // Extract menu using Gemini AI
-    const menuData = await extractMenuFromImage(base64, mimeType);
+    const menuData = await extractMenuFromImage(base64, mimeType, priceOption);
 
     return NextResponse.json(menuData);
   } catch (error) {

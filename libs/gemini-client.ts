@@ -1,7 +1,21 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { MenuData } from "../types/menu";
 
-const prompt: string = `
+const defaultInstruction = `6. Nếu một món có 2 giá, hãy tạo ra 2 món mới với tên theo format "tên món (size 1)" và "tên món (size 2), nếu không có thông tin về size, hãy dùng cấu trúc tên món = "tên món + giá món". Vd: Trà sữa 15`;
+const basePriceInstruction = `6. Chỉ ghi nhận duy nhất 1 món với giá base thấp nhất khi món có nhiều giá và size. Ví dụ trên menu có 2 món cafe size S: 30000, cafe size L: 40000 => Hệ thống chỉ ghi nhận món cà phê: 30000`;
+
+export async function extractMenuFromImage(
+  imageBase64: string,
+  mimeType: string = "image/jpeg",
+  priceOption: string = "default",
+): Promise<MenuData> {
+  // Khởi tạo Gemini AI
+  const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
+
+  const selectedInstruction =
+    priceOption === "base_price" ? basePriceInstruction : defaultInstruction;
+
+  const prompt = `
 Phân tích ảnh menu quán ăn này và trích xuất thông tin theo định dạng JSON sau:
 
 {
@@ -26,21 +40,14 @@ YÊU CẦU:
 3. Nếu không có mô tả, bỏ qua field "description"
 4. Giữ nguyên ngôn ngữ trong menu, nếu menu có cả tiếng việt và tiếng anh cho mỗi món thì ưu tiên tiếng anh
 5. Đọc kỹ toàn bộ menu, không bỏ sót món nào
-6. Nếu một món có 2 giá, hãy tạo ra 2 món mới với tên theo format "tên món (size 1)" và "tên món (size 2), nếu không có thông tin về size, hãy dùng cấu trúc tên món = "tên món + giá món". Vd: Trà sữa 15
+${selectedInstruction}
 7. Gía để dạng số nguyên như 50000. Nếu giá chỉ ghi ví dụ như 120 thay vì 120000 thì hãy thêm 3 số 0 vào sau (120 -> 120000)
 Hãy phân tích ảnh và trả về JSON
 `;
 
-export async function extractMenuFromImage(
-  imageBase64: string,
-  mimeType: string = "image/jpeg",
-): Promise<MenuData> {
-  // Khởi tạo Gemini AI
-  const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
-
   // Sử dụng model Gemini 1.5 Flash (miễn phí, nhanh)
   const model = genAI.getGenerativeModel({
-    model: "gemini-2.5-flash-lite",
+    model: "gemini-2.5-flash",
     generationConfig: {
       temperature: 0.4,
       topK: 32,
