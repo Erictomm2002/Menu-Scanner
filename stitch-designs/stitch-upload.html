@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Menu Digitizer - Liquid Glass</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#2513ec",
+                        "accent-cyan": "#00f2ff",
+                        "accent-purple": "#bc13fe",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#0a0914",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "1rem",
+                        "lg": "2rem",
+                        "xl": "3rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            overflow-x: hidden;
+        }
+        .liquid-bg {
+            background: radial-gradient(circle at 0% 0%, #121022 0%, #0a0914 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        .blob {
+            position: absolute;
+            filter: blur(80px);
+            border-radius: 50%;
+            z-index: 0;
+            opacity: 0.6;
+        }
+        .blob-1 { width: 500px; height: 500px; background: #2513ec; top: -100px; left: -100px; }
+        .blob-2 { width: 400px; height: 400px; background: #bc13fe; bottom: -50px; right: -50px; }
+        .blob-3 { width: 300px; height: 300px; background: #00f2ff; top: 40%; left: 60%; }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37), inset 0 0 10px rgba(255, 255, 255, 0.05);
+        }
+        .glass-button {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+        .glass-button:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+        .text-gradient {
+            background: linear-gradient(90deg, #bc13fe, #2513ec, #00f2ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .btn-gradient {
+            background: linear-gradient(135deg, #bc13fe 0%, #2513ec 50%, #00f2ff 100%);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .btn-gradient:hover {
+            box-shadow: 0 0 25px rgba(37, 19, 236, 0.5);
+            transform: scale(1.02);
+        }
+        .dashed-border {
+            background-image: url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' rx='24' ry='24' stroke='%23ffffff44' stroke-width='2' stroke-dasharray='12%2c 12' stroke-dashoffset='0' stroke-linecap='square'/%3e%3c/svg%3e");
+            border-radius: 24px;
+        }
+        .hover-lift {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .hover-lift:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+<body class="bg-background-dark text-white min-h-screen liquid-bg">
+<!-- Background Blobs -->
+<div class="blob blob-1"></div>
+<div class="blob blob-2"></div>
+<div class="blob blob-3"></div>
+<!-- Main Navigation / Header Bar -->
+<nav class="relative z-10 flex items-center justify-between px-8 py-6 max-w-7xl mx-auto">
+<div class="flex items-center gap-3">
+<div class="size-10 flex items-center justify-center rounded-xl bg-gradient-to-br from-accent-purple to-primary">
+<span class="material-symbols-outlined text-white text-2xl">auto_awesome</span>
+</div>
+<div>
+<h1 class="text-xl font-bold tracking-tight text-white">Menu Digitizer</h1>
+<p class="text-[10px] text-accent-cyan font-bold tracking-widest uppercase">Oscar Team Premium</p>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="hidden md:flex gap-6 text-sm font-medium text-white/60">
+<a class="hover:text-white transition-colors" href="#">Tài liệu</a>
+<a class="hover:text-white transition-colors" href="#">Bảng giá</a>
+<a class="hover:text-white transition-colors" href="#">Hỗ trợ</a>
+</div>
+<div class="flex items-center gap-3 glass-button px-4 py-2 rounded-full">
+<span class="text-xs font-semibold text-accent-purple">Sản phẩm của OSCAR TEAM</span>
+<div class="h-4 w-[1px] bg-white/20"></div>
+<span class="text-xs text-white/70">Chúc team về 100% số! 🚀</span>
+</div>
+<div class="size-10 rounded-full border border-white/20 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="User profile avatar icon" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAYRuijxb9tnMLMa06JoowaM5ZzlhjaTQ4FH2oJOt75sepiXkAjp-hQ6bKCcZbWBn_xB1pfUhmhNpuUDSbq8G94ZxQrFjNETnL-AWcc1LlAaLfD_XhyjJWudevnEIG53ltTKQiPiZm0lZVjjW8ng0hJYBYWOuyqAxdNbk8vtPAzqsgJdN321Mw7Ob_kBd8tAKSgdMjjcPhGjMLLjPUw-wq1E94tq6h-5rVJQgJqQc4zmOkC-5V90SsKoh3b9P7pz2__b7wpSJlYCMw"/>
+</div>
+</div>
+</nav>
+<!-- Content Area -->
+<main class="relative z-10 max-w-5xl mx-auto px-6 py-10">
+<!-- Main Glass Card -->
+<div class="glass-card rounded-[2.5rem] p-8 md:p-12 border border-white/10">
+<header class="text-center mb-12">
+<h2 class="text-4xl md:text-5xl font-black mb-4 text-gradient">Menu Digitizer - Số hóa thực đơn</h2>
+<p class="text-white/60 text-lg max-w-2xl mx-auto">Chuyển đổi ảnh thực đơn nhà hàng thành dữ liệu có cấu trúc bằng AI thế hệ mới.</p>
+</header>
+<!-- Upload Area -->
+<div class="relative group cursor-pointer">
+<div class="dashed-border absolute inset-0 transition-opacity group-hover:opacity-80"></div>
+<div class="relative flex flex-col items-center justify-center py-20 px-6 rounded-[24px] bg-white/[0.02] group-hover:bg-white/[0.04] transition-all">
+<div class="mb-6 relative">
+<div class="size-20 bg-primary/20 rounded-full blur-xl absolute -inset-2 group-hover:bg-accent-purple/30 transition-colors"></div>
+<div class="relative size-20 glass-card rounded-3xl flex items-center justify-center border-white/20">
+<span class="material-symbols-outlined text-4xl text-white group-hover:scale-110 transition-transform">cloud_upload</span>
+</div>
+</div>
+<h3 class="text-2xl font-bold mb-2">Tải lên tối đa 5 ảnh thực đơn</h3>
+<p class="text-white/40 font-medium">Bấm để chọn ảnh hoặc kéo thả vào đây (JPG, PNG, WEBP...)</p>
+</div>
+</div>
+<!-- Uploaded Thumbnails -->
+<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4 mt-8">
+<div class="relative group rounded-2xl overflow-hidden glass-card aspect-square p-2">
+<img class="w-full h-full object-cover rounded-xl opacity-80 group-hover:opacity-100 transition-opacity" data-alt="Close up photo of a restaurant menu page" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAC4wSpUQAf5aLNMj3iAAg-cPI8MBvUF5OCQRYQ4fD8WgdNidaCiiY96puf-cncHnt_dCXTqcQQlctVd81Oxg6Ik5ChJYbiW_INsXkGv1JAKOIdZHCj033qM1TNhgfMf3LEP2ZzPvBcKFB8i0cqiFJk2YHfmOBgwFUlHCH4IYxZ53L1SRNgJD_e0p32P95xBOdONMBFLkPSDivlLUndTczQ5D4kmIIcxE7ORlzWcUJJE7X27X6DW1B4sriQE7NIjvVQawhukFH9WOk"/>
+<button class="absolute top-3 right-3 glass-button size-8 flex items-center justify-center rounded-full text-white/80 hover:text-red-400">
+<span class="material-symbols-outlined text-sm">close</span>
+</button>
+<div class="absolute bottom-2 left-2 right-2 text-[10px] bg-black/40 backdrop-blur-md rounded px-2 py-1 truncate">menu_lunch_01.jpg</div>
+</div>
+<div class="relative group rounded-2xl overflow-hidden glass-card aspect-square p-2">
+<img class="w-full h-full object-cover rounded-xl opacity-80 group-hover:opacity-100 transition-opacity" data-alt="Modern minimalist cafe menu design" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA6WZIMgSyrqzzFmucjdR87dz33Z94v02N-llkeew2EiPEgeHK2jKHFMj7061gAOXsZSJZ0GPEzF8r4EkylfK-Ru6nI6j86R21FLeWYGqxduHLsV7EoEdAdD-15d8Yvfzgbd3xYS7Z_rsa5AIzCn4feKk_ysQjHyT5Ih9CwuwVhSuMAaz1KoNUy1L3JVXiof4fJLiXpSkoTlRQSLdiGiNQu-VTZxwQFM6UwDftTUdajOeOtpr7aR6ibQYCsHX0d7KhSLrFEnW9I180"/>
+<button class="absolute top-3 right-3 glass-button size-8 flex items-center justify-center rounded-full text-white/80">
+<span class="material-symbols-outlined text-sm">close</span>
+</button>
+<div class="absolute bottom-2 left-2 right-2 text-[10px] bg-black/40 backdrop-blur-md rounded px-2 py-1 truncate">cafe_list.png</div>
+</div>
+<!-- Placeholder for more -->
+<div class="flex items-center justify-center rounded-2xl border border-white/5 bg-white/[0.02] aspect-square">
+<span class="material-symbols-outlined text-white/20 text-3xl">add</span>
+</div>
+</div>
+<!-- Options & Action -->
+<div class="mt-12 flex flex-col md:flex-row items-center justify-between gap-8 border-t border-white/10 pt-10">
+<div class="flex flex-col gap-4">
+<label class="text-sm font-bold text-white/50 uppercase tracking-widest flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">settings</span> Extraction Options
+                    </label>
+<div class="flex p-1 bg-white/5 rounded-full border border-white/10 w-fit">
+<button class="px-6 py-2 rounded-full text-sm font-bold bg-white/10 text-white shadow-lg shadow-black/20">Chi tiết (Mặc định)</button>
+<button class="px-6 py-2 rounded-full text-sm font-medium text-white/40 hover:text-white/60 transition-colors">Cơ bản</button>
+</div>
+</div>
+<button class="btn-gradient w-full md:w-auto px-12 py-5 rounded-full text-lg font-bold flex items-center justify-center gap-3">
+<span class="material-symbols-outlined">rocket_launch</span>
+                    Bắt đầu xử lý 2 ảnh
+                </button>
+</div>
+</div>
+<!-- Bottom Feature Cards -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12">
+<div class="glass-card p-8 rounded-3xl border border-white/5 hover-lift">
+<div class="size-12 rounded-2xl bg-accent-cyan/10 flex items-center justify-center mb-6">
+<span class="material-symbols-outlined text-accent-cyan">speed</span>
+</div>
+<h4 class="text-xl font-bold mb-2">Nhanh chóng</h4>
+<p class="text-white/50 text-sm leading-relaxed">Trích xuất dữ liệu thực đơn chỉ trong vài giây với kiến trúc AI xử lý song song.</p>
+</div>
+<div class="glass-card p-8 rounded-3xl border border-white/5 hover-lift">
+<div class="size-12 rounded-2xl bg-accent-purple/10 flex items-center justify-center mb-6">
+<span class="material-symbols-outlined text-accent-purple">verified</span>
+</div>
+<h4 class="text-xl font-bold mb-2">Chính xác</h4>
+<p class="text-white/50 text-sm leading-relaxed">AI nhận diện ngôn ngữ đa dạng và bóc tách dữ liệu đơn giá chuẩn xác tuyệt đối.</p>
+</div>
+<div class="glass-card p-8 rounded-3xl border border-white/5 hover-lift">
+<div class="size-12 rounded-2xl bg-primary/10 flex items-center justify-center mb-6">
+<span class="material-symbols-outlined text-primary">download</span>
+</div>
+<h4 class="text-xl font-bold mb-2">Dễ dàng xuất file</h4>
+<p class="text-white/50 text-sm leading-relaxed">Tải về dưới dạng file Excel, CSV hoặc JSON để tích hợp trực tiếp vào hệ thống POS.</p>
+</div>
+</div>
+<!-- Footer -->
+<footer class="mt-20 text-center text-white/30 text-xs">
+<p>© 2024 OSCAR TEAM - AI Digitization Lab. All rights reserved.</p>
+<div class="mt-4 flex justify-center gap-4">
+<a class="hover:text-white transition-colors" href="#">Privacy Policy</a>
+<span>•</span>
+<a class="hover:text-white transition-colors" href="#">Terms of Service</a>
+</div>
+</footer>
+</main>
+<!-- Floating Decoration -->
+<div class="fixed top-1/4 right-0 w-64 h-64 bg-accent-cyan/5 blur-[100px] pointer-events-none"></div>
+<div class="fixed bottom-1/4 left-0 w-64 h-64 bg-accent-purple/5 blur-[100px] pointer-events-none"></div>
+</body></html>

@@ -158,25 +158,38 @@ export default function Home() {
   }
 
   return (
-    <main className="min-h-screen bg-background">
-      {currentStep === "upload" && (
-        <MenuUploadScreen onUpload={handleImageUpload} loading={loading} />
-      )}
-      {currentStep === "edit" && menuData && (
-        <MenuEditScreen
-          data={menuData}
-          onChange={handleItemUpdate}
-          onExport={handleExport}
-          onBack={handleReset}
-        />
-      )}
-      {currentStep === "export" && menuData && (
-        <MenuExportScreen
-          restaurantName={menuData.restaurantName ?? ""}
-          menuData={menuData}
-          onBack={() => setCurrentStep("edit")}
-        />
-      )}
+    <main className="min-h-screen">
+      <div className="fixed inset-0 -z-10 overflow-hidden">
+        {/* Animated Background Blobs */}
+        <div className="absolute inset-0 bg-gradient-to-br from-purple-900 via-blue-900 to-cyan-900">
+          <div className="absolute top-0 left-0 w-96 h-96 bg-purple-500/30 rounded-full blur-3xl animate-pulse" style={{ animationDuration: '8s' }} />
+          <div className="absolute top-20 right-10 w-80 h-80 bg-blue-500/30 rounded-full blur-3xl animate-pulse" style={{ animationDuration: '10s' }} />
+          <div className="absolute bottom-20 left-20 w-72 h-72 bg-cyan-500/30 rounded-full blur-3xl animate-pulse" style={{ animationDuration: '9s' }} />
+          <div className="absolute top-1/2 left-1/3 w-64 h-64 bg-pink-500/20 rounded-full blur-3xl animate-pulse" style={{ animationDuration: '7s' }} />
+        </div>
+      </div>
+
+      {/* Content */}
+      <div className="relative z-10">
+        {currentStep === "upload" && (
+          <MenuUploadScreen onUpload={handleImageUpload} loading={loading} />
+        )}
+        {currentStep === "edit" && menuData && (
+          <MenuEditScreen
+            data={menuData}
+            onChange={handleItemUpdate}
+            onExport={handleExport}
+            onBack={handleReset}
+          />
+        )}
+        {currentStep === "export" && menuData && (
+          <MenuExportScreen
+            restaurantName={menuData.restaurantName ?? ""}
+            menuData={menuData}
+            onBack={() => setCurrentStep("edit")}
+          />
+        )}
+      </div>
     </main>
   )
 }

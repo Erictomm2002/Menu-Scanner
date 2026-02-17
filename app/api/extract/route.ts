@@ -48,7 +48,7 @@ export async function POST(request: NextRequest) {
     });
 
     // Extract menu using Gemini AI
-    const menuData = await extractMenuFromImage(base64, mimeType, priceOption);
+    const menuData = await extractMenuFromImage(base64, mimeType);
 
     return NextResponse.json(menuData);
   } catch (error) {
