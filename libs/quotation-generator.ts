@@ -5,7 +5,7 @@ import { join } from "path";
 import { parseDescriptionForExcel } from "./markdown-to-excel";
 
 const TEMPLATE_MAPPING = {
-  customerName: "C13",
+  customerName: "B13",
   customerPhone: "B14",
   customerModel: "B15",
   customerAddress: "B16",
