@@ -2,7 +2,19 @@
   "mcpServers": {
     "playwright": {
       "command": "npx",
-      "args": ["-y", "@playwright/mcp@latest"]
+      "args": [
+        "-y",
+        "@playwright/mcp@latest"
+      ],
+      "env": {
+        "PLAYWRIGHT_BROWSERS_PATH": "/home/tuong/.cache/ms-playwright"
+      }
+    },
+    "supabase": {
+      "transport": {
+        "type": "http",
+        "url": "https://mcp.supabase.com/mcp"
+      }
     }
   }
 }

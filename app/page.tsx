@@ -1,10 +1,13 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import Link from "next/link"
 import MenuUploadScreen from "../components/page-component/MenuUploadScreen"
 import MenuEditScreen from "../components/page-component/MenuEditScreen"
 import MenuExportScreen from "../components/page-component/MenuExportScreen"
 import { MenuData, MenuCategory } from "@/types/menu"
+import { Button } from "@/components/ui/Button"
+import { FileText, ShoppingCart } from "lucide-react"
 
 type AppStep = "upload" | "edit" | "export"
 
@@ -168,6 +171,33 @@ export default function Home() {
           <div className="absolute top-1/2 left-1/3 w-64 h-64 bg-pink-500/20 rounded-full blur-3xl animate-pulse" style={{ animationDuration: '7s' }} />
         </div>
       </div>
+
+      {/* Navigation Header */}
+      <header className="relative z-20 border-b border-white/20 bg-white/5 backdrop-blur-sm">
+        <div className="container mx-auto px-6 py-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-6">
+              <Link href="/">
+                <Button variant="ghost" className="text-white font-medium">
+                  <FileText className="w-4 h-4 mr-2" />
+                  Menu Extractor
+                </Button>
+              </Link>
+              <Link href="/quotation">
+                <Button variant="ghost" className="text-white/70 hover:text-white font-medium">
+                  <ShoppingCart className="w-4 h-4 mr-2" />
+                  Báo Giá
+                </Button>
+              </Link>
+              <Link href="/products">
+                <Button variant="ghost" className="text-white/70 hover:text-white font-medium">
+                  Sản Phẩm
+                </Button>
+              </Link>
+            </div>
+          </div>
+        </div>
+      </header>
 
       {/* Content */}
       <div className="relative z-10">
