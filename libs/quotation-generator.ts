@@ -210,6 +210,10 @@ export async function generateQuotationExcel(
         getSubproductsForParent
       );
     }
+    // Add hardware total row immediately after hardware items
+    if (hardwareTotal > 0) {
+      currentRow = addHardwareTotalRow(worksheet, currentRow, hardwareTotal);
+    }
   }
 
   // ---------- Summary rows ----------
@@ -324,6 +328,46 @@ function addSoftwareTotalRow(
 }
 
 // ---------------------------------------------------------------------------
+// Hardware total row (appears after hardware items, before summary section)
+// ---------------------------------------------------------------------------
+
+function addHardwareTotalRow(
+  worksheet: ExcelJS.Worksheet,
+  row: number,
+  hardwareTotal: number,
+): number {
+  const labelCell = worksheet.getCell(`A${row}`);
+  labelCell.value = "Tổng cộng phần cứng (VNĐ)";
+  labelCell.font = { ...FONT_STYLES.SUMMARY_LABEL };
+  labelCell.alignment = { horizontal: "center", vertical: "middle" };
+  labelCell.border = THIN_BORDER;
+  worksheet.mergeCells(`A${row}:E${row}`);
+
+  // Apply borders to merged cells
+  for (let c = 2; c <= 5; c++) {
+    const cell = worksheet.getCell(row, c);
+    cell.font = { ...FONT_STYLES.SUMMARY_LABEL };
+    cell.alignment = { horizontal: "center", vertical: "middle" };
+    cell.border = THIN_BORDER;
+  }
+
+  const valueCell = worksheet.getCell(`F${row}`);
+  valueCell.value = hardwareTotal;
+  valueCell.font = { ...FONT_STYLES.SUMMARY_HW_VALUE };
+  valueCell.numFmt = "#,##0";
+  valueCell.alignment = { horizontal: "center", vertical: "middle" };
+  valueCell.fill = {
+    type: "pattern",
+    pattern: "solid",
+    fgColor: { argb: "FFFFFFFF" },
+  };
+  valueCell.border = THIN_BORDER;
+
+  worksheet.getRow(row).height = 27;
+  return row + 1;
+}
+
+// ---------------------------------------------------------------------------
 // Product row with subproducts
 // ---------------------------------------------------------------------------
 
@@ -424,10 +468,16 @@ async function fillProductRowWithSubproducts(
 
   // --- Column E: Unit Price (center) ---
   const priceCell = worksheet.getCell(`E${row}`);
-  priceCell.value = item.unit_price;
-  priceCell.font = { ...FONT_STYLES.NUMBER };
-  priceCell.numFmt = "#,##0";
-  priceCell.alignment = { horizontal: "center", vertical: "middle" };
+  if (item.is_free || item.unit_price === 0) {
+    priceCell.value = "Miễn phí";
+    priceCell.font = { ...FONT_STYLES.FREE };
+    priceCell.alignment = { horizontal: "center", vertical: "middle" };
+  } else {
+    priceCell.value = item.unit_price;
+    priceCell.font = { ...FONT_STYLES.NUMBER };
+    priceCell.numFmt = "#,##0";
+    priceCell.alignment = { horizontal: "center", vertical: "middle" };
+  }
   priceCell.border = THIN_BORDER;
 
   // --- Column F: Total (center) ---
@@ -507,14 +557,14 @@ function fillSubproductRow(
   qtyCell.border = THIN_BORDER;
 
   const priceCell = worksheet.getCell(`E${row}`);
-  priceCell.value = item.unit_price;
+  priceCell.value = item.unit_price === 0 ? "Miễn phí" : item.unit_price;
   priceCell.font = { ...FONT_STYLES.NUMBER };
   priceCell.numFmt = "#,##0";
   priceCell.alignment = { horizontal: "center", vertical: "middle" };
   priceCell.border = THIN_BORDER;
 
   const totalCell = worksheet.getCell(`F${row}`);
-  if (item.is_free || item.unit_price === 0) {
+  if (item.unit_price === 0) {
     totalCell.value = "Miễn phí";
     totalCell.font = { ...FONT_STYLES.FREE, bold: true };
     totalCell.alignment = { horizontal: "center", vertical: "middle" };

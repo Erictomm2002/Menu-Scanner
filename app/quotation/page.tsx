@@ -20,6 +20,7 @@ export default function QuotationPage() {
   const [customerAddress, setCustomerAddress] = useState("");
   const [customerModel, setCustomerModel] = useState("");
   const [isSaving, setIsSaving] = useState(false);
+  const [isExporting, setIsExporting] = useState(false);
   const [savedQuotationId, setSavedQuotationId] = useState<string | null>(null);
   const [message, setMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
 
@@ -179,6 +180,9 @@ export default function QuotationPage() {
       return;
     }
 
+    setIsExporting(true);
+    setMessage(null);
+
     try {
       // If not saved, save first and get the returned ID
       let quotationId: string | null = savedQuotationId || null;
@@ -216,6 +220,8 @@ export default function QuotationPage() {
     } catch (error) {
       console.error("Error exporting:", error);
       setMessage({ type: "error", text: "Lỗi khi export" });
+    } finally {
+      setIsExporting(false);
     }
   };
 
@@ -289,6 +295,7 @@ export default function QuotationPage() {
           onExport={handleExport}
           onSave={handleSave}
           isSaving={isSaving}
+          isExporting={isExporting}
         />
       </div>
 

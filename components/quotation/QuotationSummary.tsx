@@ -79,6 +79,7 @@ interface QuotationFooterProps {
   onExport: () => void;
   onSave: () => void;
   isSaving?: boolean;
+  isExporting?: boolean;
   itemCount: number;
 }
 
@@ -86,6 +87,7 @@ export function QuotationFooter({
   onExport,
   onSave,
   isSaving = false,
+  isExporting = false,
   itemCount = 0,
 }: QuotationFooterProps) {
   return (
@@ -102,10 +104,10 @@ export function QuotationFooter({
       <Button
         variant="primary"
         onClick={onExport}
-        disabled={itemCount === 0}
+        disabled={itemCount === 0 || isExporting}
       >
         <Download className="w-5 h-5" />
-        Xuất Excel
+        {isExporting ? "Đang xuất..." : "Xuất Excel"}
       </Button>
     </div>
   );

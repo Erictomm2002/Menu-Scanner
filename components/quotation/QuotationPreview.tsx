@@ -42,6 +42,7 @@ interface QuotationPreviewProps {
   onExport: () => void;
   onSave: () => void;
   isSaving?: boolean;
+  isExporting?: boolean;
 }
 
 export function QuotationPreview({
@@ -63,6 +64,7 @@ export function QuotationPreview({
   onExport,
   onSave,
   isSaving = false,
+  isExporting = false,
 }: QuotationPreviewProps) {
   // Handle parent-child deletion when removing an item
   const handleItemRemove = (index: number) => {
@@ -274,6 +276,7 @@ export function QuotationPreview({
           onExport={onExport}
           onSave={onSave}
           isSaving={isSaving}
+          isExporting={isExporting}
           itemCount={items.length}
         />
       </div>
