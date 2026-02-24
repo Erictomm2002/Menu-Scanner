@@ -5,10 +5,10 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin", "vietnamese"] });
 
 export const metadata: Metadata = {
-  title: "Menu Extractor - Trích xuất menu tự động với AI",
+  title: "iPos Kit - Giải pháp Tự động hóa Thông minh",
   description:
-    "Chuyển đổi ảnh menu quán ăn sang file Excel tự động bằng Google Gemini AI",
-  keywords: "menu extractor, AI, Gemini, Excel, restaurant menu",
+    "Tối ưu quy trình làm việc với các giải pháp AI: Menu Extractor và Báo giá sản phẩm",
+  keywords: "iPos Kit, Menu Extractor, báo giá, AI, tự động hóa, nhà hàng, doanh nghiệp",
 };
 
 export default function RootLayout({
