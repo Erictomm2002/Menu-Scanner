@@ -4,20 +4,18 @@ import type React from "react";
 import { useState } from "react";
 
 import { Button } from "../ui/Button";
-import { Upload, Loader2, FileImage, X, Sparkles, ArrowLeft } from "lucide-react";
+import { Upload, Loader2, FileImage, X, Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
 import { Card, CardContent } from "../ui/Card";
 
 interface MenuUploadScreenProps {
   onUpload: (files: File[], extractionOption: "default" | "base_price") => void;
   loading: boolean;
-  onBack?: () => void;
 }
 
 export default function MenuUploadScreen({
   onUpload,
   loading,
-  onBack,
 }: MenuUploadScreenProps) {
   const [files, setFiles] = useState<File[]>([]);
   const [extractionOption, setExtractionOption] = useState<"default" | "base_price">("default");
@@ -63,24 +61,8 @@ export default function MenuUploadScreen({
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen px-4 py-12 pt-6">
+    <div className="flex flex-col items-center justify-center min-h-screen px-4 py-12">
       <div className="w-full max-w-2xl">
-        {onBack && (
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            className="mb-6"
-          >
-            <Button
-              variant="ghost"
-              onClick={onBack}
-              className="text-white/70 hover:text-white hover:bg-white/5"
-            >
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              Back to Home
-            </Button>
-          </motion.div>
-        )}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
