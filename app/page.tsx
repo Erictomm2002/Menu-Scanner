@@ -7,9 +7,10 @@ import MenuEditScreen from "../components/page-component/MenuEditScreen"
 import MenuExportScreen from "../components/page-component/MenuExportScreen"
 import { MenuData, MenuCategory } from "@/types/menu"
 import { Button } from "@/components/ui/Button"
-import { FileText, ShoppingCart } from "lucide-react"
+import { FileText, ShoppingCart, ArrowRight } from "lucide-react"
+import { motion } from "framer-motion"
 
-type AppStep = "upload" | "edit" | "export"
+type AppStep = "upload" | "edit" | "export" | "home"
 
 // Helper function to generate a URL-friendly slug from a string
 const slugify = (text: string): string => {
@@ -29,13 +30,13 @@ export default function Home() {
   const [currentStep, setCurrentStep] = useState<AppStep>(() => {
     if (typeof window !== "undefined") {
       const saved = localStorage.getItem("menuApp_currentStep")
-      // If the user reloads on the export page, reset to the upload page.
+      // If the user reloads on the export page, reset to the home page.
       if (saved === "export") {
-        return "upload"
+        return "home"
       }
-      return (saved as AppStep) || "upload"
+      return (saved as AppStep) || "home"
     }
-    return "upload"
+    return "home"
   })
 
   const [menuData, setMenuData] = useState<MenuData | null>(() => {
@@ -161,39 +162,22 @@ export default function Home() {
   }
 
   return (
-    <main className="min-h-screen">
-      <div className="fixed inset-0 -z-10 overflow-hidden">
-        {/* Animated Background Blobs */}
-        <div className="absolute inset-0 bg-gradient-to-br from-purple-900 via-blue-900 to-cyan-900">
-          <div className="absolute top-0 left-0 w-96 h-96 bg-purple-500/30 rounded-full blur-3xl animate-pulse" style={{ animationDuration: '8s' }} />
-          <div className="absolute top-20 right-10 w-80 h-80 bg-blue-500/30 rounded-full blur-3xl animate-pulse" style={{ animationDuration: '10s' }} />
-          <div className="absolute bottom-20 left-20 w-72 h-72 bg-cyan-500/30 rounded-full blur-3xl animate-pulse" style={{ animationDuration: '9s' }} />
-          <div className="absolute top-1/2 left-1/3 w-64 h-64 bg-pink-500/20 rounded-full blur-3xl animate-pulse" style={{ animationDuration: '7s' }} />
-        </div>
-      </div>
-
+    <main className="min-h-screen bg-[#0F172A]">
       {/* Navigation Header */}
-      <header className="relative z-20 border-b border-white/20 bg-white/5 backdrop-blur-sm">
+      <header className="relative z-20 border-b border-white/10 bg-transparent backdrop-blur-sm">
         <div className="container mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-6">
               <Link href="/">
-                <Button variant="ghost" className="text-white font-medium">
-                  <FileText className="w-4 h-4 mr-2" />
-                  Menu Extractor
+                <Button variant="ghost" className="text-white font-medium hover:bg-white/5">
+                  iPos Kit
                 </Button>
               </Link>
-              <Link href="/quotation">
-                <Button variant="ghost" className="text-white/70 hover:text-white font-medium">
-                  <ShoppingCart className="w-4 h-4 mr-2" />
-                  Báo Giá
-                </Button>
-              </Link>
-              <Link href="/products">
-                <Button variant="ghost" className="text-white/70 hover:text-white font-medium">
-                  Sản Phẩm
-                </Button>
-              </Link>
+            </div>
+            <div className="flex items-center gap-4">
+              <Button variant="ghost" className="text-white/70 hover:text-white hover:bg-white/5">
+                Đăng nhập
+              </Button>
             </div>
           </div>
         </div>
@@ -201,15 +185,82 @@ export default function Home() {
 
       {/* Content */}
       <div className="relative z-10">
+        {currentStep === "home" && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="min-h-[calc(100vh-73px)] flex flex-col items-center justify-center px-6"
+          >
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white text-center mb-4">
+              Giải pháp Tự động hóa Thông minh
+            </h1>
+            <p className="text-white/60 text-lg md:text-xl text-center mb-16 max-w-2xl">
+              Tối ưu quy trình làm việc, giảm chi phí và mở rộng quy mô nhanh chóng với các giải pháp AI
+            </p>
+
+            <div className="grid md:grid-cols-2 gap-6 w-full max-w-4xl">
+              {/* Menu Extractor Card */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.2 }}
+                whileHover={{ scale: 1.02 }}
+                className="group cursor-pointer"
+                onClick={() => setCurrentStep("upload")}
+              >
+                <div className="bg-[#1E293B] border border-white/10 rounded-2xl p-8 h-full transition-all duration-300 hover:border-blue-500/50 hover:shadow-[0_0_30px_rgba(59,130,246,0.15)]">
+                  <h3 className="text-2xl font-semibold text-white mb-3 flex items-center gap-3">
+                    <FileText className="w-6 h-6 text-blue-500" />
+                    Menu Extractor
+                  </h3>
+                  <p className="text-white/60 mb-6">
+                    Tự động chuyển đổi menu nhà hàng sang định dạng số với độ chính xác cao bằng công nghệ AI OCR.
+                  </p>
+                  <div className="flex items-center text-blue-400 font-medium group-hover:text-blue-300 transition-colors">
+                    Bắt đầu ngay
+                    <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+                  </div>
+                </div>
+              </motion.div>
+
+              {/* Quotation Card */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.3 }}
+                whileHover={{ scale: 1.02 }}
+                className="group"
+              >
+                <Link href="/quotation" className="block h-full">
+                  <div className="bg-[#1E293B] border border-white/10 rounded-2xl p-8 h-full transition-all duration-300 hover:border-purple-500/50 hover:shadow-[0_0_30px_rgba(168,85,247,0.15)]">
+                    <h3 className="text-2xl font-semibold text-white mb-3 flex items-center gap-3">
+                      <ShoppingCart className="w-6 h-6 text-purple-500" />
+                      Báo giá sản phẩm
+                    </h3>
+                    <p className="text-white/60 mb-6">
+                      Tạo báo giá sản phẩm chuyên nghiệp trong vài giây. Tối ưu quy trình bán hàng của bạn.
+                    </p>
+                    <div className="flex items-center text-purple-400 font-medium group-hover:text-purple-300 transition-colors">
+                      Bắt đầu ngay
+                      <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+                    </div>
+                  </div>
+                </Link>
+              </motion.div>
+            </div>
+          </motion.div>
+        )}
+
         {currentStep === "upload" && (
-          <MenuUploadScreen onUpload={handleImageUpload} loading={loading} />
+          <MenuUploadScreen onUpload={handleImageUpload} loading={loading} onBack={() => setCurrentStep("home")} />
         )}
         {currentStep === "edit" && menuData && (
           <MenuEditScreen
             data={menuData}
             onChange={handleItemUpdate}
             onExport={handleExport}
-            onBack={handleReset}
+            onBack={() => setCurrentStep("home")}
           />
         )}
         {currentStep === "export" && menuData && (
