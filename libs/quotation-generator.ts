@@ -132,11 +132,9 @@ export async function generateQuotationExcel(
 
   // Helper: get subproducts for a specific parent item from the original items array
   const getSubproductsForParent = (parentProductId: string): QuotationItem[] => {
-    console.log("items:", items);
     const subproduct = items.filter(
       (item) => item.is_subproduct && item.parent_item_id == parentProductId,
     );
-    console.log("subproduct", subproduct);
     return subproduct;
   };
 
@@ -367,6 +365,28 @@ function addHardwareTotalRow(
   return row + 1;
 }
 
+// Utility function tính offset căn giữa ảnh trong ô
+function calcImageCenterOffset(params: {
+  colWidthChars: number;  // width của column (đơn vị chars)
+  rowHeightPt: number;    // height của row (đơn vị pt)
+  imgWidth: number;       // px
+  imgHeight: number;      // px
+}) {
+  const { colWidthChars, rowHeightPt, imgWidth, imgHeight } = params;
+
+  const COL_CHAR_TO_PX = 7.1;   // Arial: ~7.1px per char
+  const ROW_PT_TO_PX = 1.333;   // 1pt ≈ 1.333px
+  const PX_TO_EMU = 9525;        // 1px = 9525 EMU
+
+  const colWidthPx = colWidthChars * COL_CHAR_TO_PX;
+  const rowHeightPx = rowHeightPt * ROW_PT_TO_PX;
+
+  const colOff = Math.max(0, (colWidthPx - imgWidth) / 2) * PX_TO_EMU;
+  const rowOff = Math.max(0, (rowHeightPx - imgHeight) / 2) * PX_TO_EMU;
+
+  return { colOff, rowOff };
+}
+
 // ---------------------------------------------------------------------------
 // Product row with subproducts
 // ---------------------------------------------------------------------------
@@ -408,6 +428,17 @@ async function fillProductRowWithSubproducts(
           extension: extension as "png" | "jpeg" | "gif",
         });
 
+        const COL_A_WIDTH = 40; // chars — phải khớp với chỗ bạn set column width
+        const IMG_SIZE = 100;   // px
+
+        const { colOff, rowOff } = calcImageCenterOffset({
+          colWidthChars: COL_A_WIDTH,
+          rowHeightPt: productRow.height,  // lấy trực tiếp từ row đã set ở trên
+          imgWidth: IMG_SIZE,
+          imgHeight: IMG_SIZE,
+        });
+
+
         // Center image horizontally in column A
         // Column A width is 40 chars ≈ 284px (at ~7.1px per char in Arial)
         // Image width is 100px
@@ -420,9 +451,10 @@ async function fillProductRowWithSubproducts(
           tl: {
             col: 0,
             row: row - 1,
-            colOff: 87630, // ~92px offset to center the 100px image
+            nativeColOff: colOff,
+            nativeRowOff: rowOff,
           } as any,
-          ext: { width: 100, height: 100 },
+          ext: { width: IMG_SIZE, height: IMG_SIZE },
           editAs: "absolute",
         });
       }
@@ -437,7 +469,7 @@ async function fillProductRowWithSubproducts(
   nameCell.font = { ...FONT_STYLES.PRODUCT_NAME };
   nameCell.alignment = {
     horizontal: "center",
-    vertical: "bottom",
+    vertical: "middle",
     wrapText: true,
   };
   nameCell.border = THIN_BORDER;
@@ -564,7 +596,7 @@ function fillSubproductRow(
   priceCell.border = THIN_BORDER;
 
   const totalCell = worksheet.getCell(`F${row}`);
-  if (item.unit_price === 0) {
+  if (item.unit_price === 0 || item.is_free) {
     totalCell.value = "Miễn phí";
     totalCell.font = { ...FONT_STYLES.FREE, bold: true };
     totalCell.alignment = { horizontal: "center", vertical: "middle" };
