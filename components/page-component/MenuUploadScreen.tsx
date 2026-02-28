@@ -22,11 +22,20 @@ export default function MenuUploadScreen({
   const [files, setFiles] = useState<File[]>([]);
   const [extractionOption, setExtractionOption] = useState<"default" | "base_price">("default");
 
+  const MAX_IMAGES = 10;
+
   const handleFileChange = (selectedFiles: FileList | null) => {
     if (!selectedFiles) return;
 
     const newFiles = Array.from(selectedFiles);
-    const allFiles = [...files, ...newFiles].slice(0, 5); // Giới hạn 5 files
+
+    // Check if adding new files would exceed the limit
+    if (files.length + newFiles.length > MAX_IMAGES) {
+      alert(`⚠️ Bạn chỉ có thể tải lên tối đa ${MAX_IMAGES} ảnh. Vui lòng bỏ bớt ảnh và thử lại.`);
+      return;
+    }
+
+    const allFiles = [...files, ...newFiles].slice(0, MAX_IMAGES);
 
     // Lọc và kiểm tra file
     const validatedFiles = allFiles.filter(file => {
@@ -111,7 +120,7 @@ export default function MenuUploadScreen({
             <Sparkles className="w-20 h-20 mx-auto mb-4 text-purple-400" />
           </motion.div>
           <h2 className="text-2xl font-semibold mb-2 text-white">
-            {loading ? "Đang xử lý thực đơn của bạn..." : "Tải lên tối đa 5 ảnh thực đơn"}
+            {loading ? "Đang xử lý thực đơn của bạn..." : `Tải lên tối đa ${MAX_IMAGES} ảnh thực đơn`}
           </h2>
           <p className="text-white/70 mb-6">
             {loading
@@ -130,7 +139,7 @@ export default function MenuUploadScreen({
                 accept="image/*"
                 multiple
                 onChange={handleInputChange}
-                disabled={loading || files.length >= 5}
+                disabled={loading || files.length >= MAX_IMAGES}
                 className="hidden"
                 id="file-input"
               />
@@ -138,7 +147,7 @@ export default function MenuUploadScreen({
                 <Button
                   type="button"
                   onClick={() => document.getElementById("file-input")?.click()}
-                  disabled={loading || files.length >= 5}
+                  disabled={loading || files.length >= MAX_IMAGES}
                   variant="default"
                   gradient="purple-cyan"
                   glow
@@ -156,7 +165,12 @@ export default function MenuUploadScreen({
               animate={{ opacity: 1, height: "auto" }}
               className="mt-4 text-left space-y-2"
             >
-              <h3 className="font-semibold mb-2 text-white">Ảnh đã chọn:</h3>
+              <div className="flex items-center justify-between">
+                <h3 className="font-semibold text-white">Ảnh đã chọn:</h3>
+                <span className={`text-sm ${files.length >= MAX_IMAGES ? "text-red-400 font-semibold" : "text-white/60"}`}>
+                  {files.length} / {MAX_IMAGES}
+                </span>
+              </div>
               {files.map((file, index) => (
                 <motion.div
                   key={index}
