@@ -24,7 +24,7 @@ YÊU CẦU:
 1. Trả về CHỈ JSON thuần túy, KHÔNG có markdown (\`\`\`json), KHÔNG có text giải thích
 2. Nếu không thấy giá tiền, để giá về 0
 3. Nếu không có mô tả, bỏ qua field "description"
-4. Giữ nguyên ngôn ngữ trong menu, nếu menu có cả tiếng việt và tiếng anh cho mỗi món thì ưu tiên tiếng anh
+4. Giữ nguyên ngôn ngữ trong menu
 5. Đọc kỹ toàn bộ menu, không bỏ sót món nào
 6. Nếu một món có 2 giá, hãy tạo ra 2 món mới với tên theo format "tên món (size 1)" và "tên món (size 2), nếu không có thông tin về size, hãy dùng cấu trúc tên món = "tên món + giá món". Vd: Trà sữa 15
 7. Gía để dạng số nguyên như 50000. Nếu giá chỉ ghi ví dụ như 120 thay vì 120000 thì hãy thêm 3 số 0 vào sau (120 -> 120000)
