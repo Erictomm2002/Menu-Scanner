@@ -137,3 +137,71 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Pixel Theme Configuration */
+.pixel-theme {
+  /* Color Variables (scoped) */
+  --px-bg-primary: #FEF8E7;
+  --px-bg-secondary: #F5E6C8;
+  --px-bg-accent: #FFF9E6;
+  --px-primary: #6B4C9A;
+  --px-primary-light: #9B7ED1;
+  --px-primary-dark: #4A326B;
+  --px-accent: #FFB347;
+  --px-accent-glow: #FFD166;
+  --px-success: #4ECDC4;
+  --px-warning: #FF6B6B;
+  --px-info: #45B7D1;
+  --px-text-primary: #2D3436;
+  --px-text-secondary: #636E72;
+  --px-border: #2D3436;
+  --px-border-light: #B2BEC3;
+}
+
+/* Pixel Theme Wrapper */
+.pixel-theme {
+  background-color: var(--px-bg-primary);
+  color: var(--px-text-primary);
+  font-family: var(--font-pixel-body);
+}
+
+/* Reset inherited styles selectively */
+.pixel-theme h1,
+.pixel-theme h2,
+.pixel-theme h3,
+.pixel-theme h4,
+.pixel-theme p,
+.pixel-theme span,
+.pixel-theme div {
+  color: var(--px-text-primary);
+}
+
+/* Utility classes for pixel theme */
+@layer utilities {
+  .px-text-heading {
+    font-family: var(--font-pixel);
+    font-size: 12px;
+    line-height: 1.6;
+  }
+
+  .px-text-body {
+    font-family: var(--font-pixel-body);
+    font-size: 18px;
+  }
+
+  .px-border {
+    border: 3px solid var(--px-border);
+  }
+
+  .px-border-sm {
+    border: 2px solid var(--px-border);
+  }
+
+  .px-shadow {
+    box-shadow: 4px 4px 0 var(--px-border);
+  }
+
+  .px-shadow-sm {
+    box-shadow: 2px 2px 0 var(--px-border);
+  }
+}
