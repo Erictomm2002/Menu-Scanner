@@ -18,6 +18,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="vi" className="dark">
+      <head>
+        <link
+          href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap"
+          rel="stylesheet"
+        />
+      </head>
       <body className={inter.className}>{children}</body>
     </html>
   );
