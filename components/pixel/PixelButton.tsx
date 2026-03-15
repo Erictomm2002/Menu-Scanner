@@ -1,12 +1,12 @@
 "use client"
 
 import { motion } from "framer-motion"
-import { ButtonHTMLAttributes, ReactNode } from "react"
+import { ReactNode } from "react"
 import { cn } from "@/lib/utils"
 
 type PixelButtonVariant = "primary" | "secondary" | "danger"
 
-interface PixelButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, "variant"> {
+interface PixelButtonProps extends Omit<React.ComponentProps<typeof motion.button>, "variant"> {
   variant?: PixelButtonVariant
   children: ReactNode
   icon?: ReactNode

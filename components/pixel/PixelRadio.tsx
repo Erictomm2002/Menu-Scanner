@@ -3,7 +3,7 @@
 import { HTMLAttributes } from "react"
 import { cn } from "@/lib/utils"
 
-interface PixelRadioProps extends Omit<HTMLAttributes<HTMLLabelElement>, "children"> {
+interface PixelRadioProps extends Omit<HTMLAttributes<HTMLLabelElement>, "children" | "onChange"> {
   name: string
   value: string
   checked: boolean
