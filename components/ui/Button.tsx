@@ -1,7 +1,8 @@
 import React from 'react'
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'default' | 'glass'
+  variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'default' | 'glass' | 'neubrutal'
+  nbColor?: 'primary' | 'secondary' | 'accent' | 'outline'
   size?: 'sm' | 'md' | 'lg'
   gradient?: 'purple-blue' | 'blue-cyan' | 'purple-cyan'
   glow?: boolean
@@ -20,7 +21,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(({
 
   // New clean design variants
   const newVariantStyles: Record<string, string> = {
-    primary: 'bg-[#2463eb] text-white hover:bg-[#1d4ed8] shadow-lg shadow-[#2463eb]/20',
+    primary: 'bg-[#2463eb] text-white hover:bg-[#1d4ed8]',
     secondary: 'bg-slate-200 text-slate-700 hover:bg-slate-300',
     outline: 'border-2 border-slate-300 text-slate-700 hover:bg-slate-50 hover:border-slate-400',
     ghost: 'text-slate-600 hover:text-[#2463eb]',
@@ -40,20 +41,40 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(({
     'purple-cyan': 'bg-gradient-to-r from-purple-600 to-cyan-600 hover:from-purple-500 hover:to-cyan-500',
   }
 
+  // Neubrutal variant styles
+  const neubrutalVariantStyles: Record<string, string> = {
+    primary: 'nb-bg-primary nb-border-2 nb-shadow-sm nb-button-hover nb-button-active nb-transition text-[#2D3436]',
+    secondary: 'bg-[#4ECDC4] nb-border-2 nb-shadow-sm nb-button-hover nb-button-active nb-transition text-[#2D3436]',
+    accent: 'bg-[#FF6B9D] nb-border-2 nb-shadow-sm nb-button-hover nb-button-active nb-transition text-[#2D3436]',
+    outline: 'bg-[#FFF9E6] nb-border-2 nb-shadow-sm nb-button-hover nb-button-active nb-transition text-[#2D3436]',
+  }
+
   // Use new styles for new variants, old styles for old variants
-  const isNewVariant = ['primary', 'secondary', 'outline', 'ghost'].includes(variant)
-  const variantStyles = isNewVariant ? newVariantStyles : oldVariantStyles
+  const isNewVariant = ['primary', 'secondary', 'outline', 'ghost', 'neubrutal'].includes(variant)
+
+  const isNeubrutalVariant = variant === 'neubrutal'
+
+  const getNeubrutalVariant = () => {
+    const color = props.nbColor || 'primary'
+    return neubrutalVariantStyles[color] || neubrutalVariantStyles.primary
+  }
+
+  const getVariantStyles = () => {
+    if (isNeubrutalVariant) {
+      return getNeubrutalVariant()
+    }
+    return isNewVariant ? newVariantStyles : oldVariantStyles
+  }
 
   const sizeStyles = {
     sm: 'px-3 py-1.5 text-sm',
     md: 'px-5 py-2.5 text-sm font-semibold',
     lg: 'px-7 py-3.5 text-base font-semibold',
   }
-
   return (
     <button
       ref={ref}
-      className={`${baseStyles} ${variantStyles[variant] || ''} ${sizeStyles[size]} ${variant === 'default' && isNewVariant ? gradientStyles[gradient] : ''} ${glow ? 'shadow-lg shadow-purple-500/50' : ''} ${className}`}
+      className={`${baseStyles} ${getVariantStyles()} ${sizeStyles[size]} ${variant === 'default' && !isNeubrutalVariant && isNewVariant ? gradientStyles[gradient] : ''} ${glow ? 'shadow-lg shadow-purple-500/50' : ''} ${className}`}
       {...props}
     >
       {children}
@@ -62,4 +83,3 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(({
 })
 
 Button.displayName = 'Button'
-
