@@ -1,0 +1,565 @@
+{
+  "quote_number": "BG-TEST-001",
+  "customer_name": "Công ty ABC",
+  "customer_phone": "0901234567",
+  "customer_address": "123 Đường ABC, Quận 1, TP.HCM",
+  "customer_model": "Model X",
+  "notes": "Ghi chú cho báo giá",
+  "subtotal_software": 15000000,
+  "subtotal_hardware": 20000000,
+  "discount_amount": 0,
+  "total_amount": 35000000,
+  "status": "draft",
+  "items": [
+    {
+      "id": "1",
+      "name": "Phần mềm quản lý bán hàng",
+      "description": "Quản lý kho, bán hàng, báo cáo",
+      "unit": "Bản",
+      "quantity": 1,
+      "unit_price": 5000000,
+      "total_price": 5000000,
+      "product_category": "software"
+    },
+    {
+      "id": "2",
+      "name": "Phần mềm kế toán",
+      "description": "Quản lý sổ sách, thuế",
+      "unit": "Bản",
+      "quantity": 1,
+      "unit_price": 3000000,
+      "total_price": 3000000,
+      "product_category": "software"
+    },
+    {
+      "id": "3",
+      "name": "Phần mềm nhân sự",
+      "description": "Quản lý lương, chấm công",
+      "unit": "Bản",
+      "quantity": 1,
+      "unit_price": 2500000,
+      "total_price": 2500000,
+      "product_category": "software"
+    },
+    {
+      "id": "4",
+      "name": "Phần mềm CRM",
+      "description": "Quản lý khách hàng",
+      "unit": "Bản",
+      "quantity": 1,
+      "unit_price": 2000000,
+      "total_price": 2000000,
+      "product_category": "software"
+    },
+    {
+      "id": "5",
+      "name": "Phần mềm bảo mật",
+      "description": "Chống virus, bảo mật dữ liệu",
+      "unit": "Bản",
+      "quantity": 1,
+      "unit_price": 1500000,
+      "total_price": 1500000,
+      "product_category": "software"
+    },
+    {
+      "id": "6",
+      "name": "Phần mềm dự án",
+      "description": "Quản lý dự án, Gantt chart",
+      "unit": "Bản",
+      "quantity": 1,
+      "unit_price": 1000000,
+      "total_price": 1000000,
+      "product_category": "software"
+    },
+    {
+      "id": "7",
+      "name": "Server Dell PowerEdge R740",
+      "description": "CPU Xeon, RAM 64GB, SSD 1TB",
+      "unit": "Cái",
+      "quantity": 2,
+      "unit_price": 50000000,
+      "total_price": 100000000,
+      "product_category": "hardware"
+    },
+    {
+      "id": "8",
+      "name": "Máy in HP LaserJet Pro",
+      "description": "In A4, WiFi, tốc độ 30 trang/phút",
+      "unit": "Cái",
+      "quantity": 5,
+      "unit_price": 8000000,
+      "total_price": 40000000,
+      "product_category": "hardware"
+    },
+    {
+      "id": "9",
+      "name": "Máy in Epson L3150",
+      "description": "In màu, WiFi, mực liên tục",
+      "unit": "Cái",
+      "quantity": 10,
+      "unit_price": 3500000,
+      "total_price": 35000000,
+      "product_category": "hardware"
+    },
+    {
+      "id": "10",
+      "name": "Máy tính để bàn Dell OptiPlex",
+      "description": "Core i5, RAM 8GB, SSD 256GB",
+      "unit": "Cái",
+      "quantity": 20,
+      "unit_price": 15000000,
+      "total_price": 300000000,
+      "product_category": "hardware"
+    },
+    {
+      "id": "11",
+      "name": "Laptop Dell Latitude",
+      "description": "Core i7, RAM 16GB, SSD 512GB",
+      "unit": "Cái",
+      "quantity": 10,
+      "unit_price": 25000000,
+      "total_price": 250000000,
+      "product_category": "hardware"
+    },
+    {
+      "id": "12",
+      "name": "Màn hình Samsung 24 inch",
+      "description": "IPS, Full HD, HDMI",
+      "unit": "Cái",
+      "quantity": 30,
+      "unit_price": 3500000,
+      "total_price": 105000000,
+      "product_category": "hardware"
+    },
+    {
+      "id": "13",
+      "name": "Bàn phím cơ Logitech",
+      "description": "RGB, Cherry MX Blue",
+      "unit": "Cái",
+      "quantity": 25,
+      "unit_price": 1500000,
+      "total_price": 37500000,
+      "product_category": "hardware"
+    },
+    {
+      "id": "14",
+      "name": "Chuột Logitech G502",
+      "description": "Khai trinh có dây, 16000 DPI",
+      "unit": "Cái",
+      "quantity": 25,
+      "unit_price": 800000,
+      "total_price": 20000000,
+      "product_category": "hardware"
+    },
+    {
+      "id": "15",
+      "name": "Switch Cisco Catalyst",
+      "description": "24 port, Gigabit",
+      "unit": "Cái",
+      "quantity": 5,
+      "unit_price": 12000000,
+      "total_price": 60000000,
+      "product_category": "hardware"
+    },
+    {
+      "id": "16",
+      "name": "Router Cisco ISR",
+      "description": "Gigabit, VPN, Firewall",
+      "unit": "Cái",
+      "quantity": 3,
+      "unit_price": 25000000,
+      "total_price": 75000000,
+      "product_category": "hardware"
+    },
+    {
+      "id": "17",
+      "name": "UPS APC 1500VA",
+      "description": "Pin dự phòng, AVR",
+      "unit": "Cái",
+      "quantity": 8,
+      "unit_price": 6000000,
+      "total_price": 48000000,
+      "product_category": "hardware"
+    },
+    {
+      "id": "18",
+      "name": "Hệ thống camera Hikvision",
+      "description": "4 camera, DVR 8 kênh",
+      "unit": "Bộ",
+      "quantity": 4,
+      "unit_price": 8000000,
+      "total_price": 32000000,
+      "product_category": "hardware"
+    },
+    {
+      "id": "19",
+      "name": "Loa Bose Companion 20",
+      "description": "2.1, USB, công suất 30W",
+      "unit": "Cái",
+      "quantity": 15,
+      "unit_price": 2000000,
+      "total_price": 30000000,
+      "product_category": "hardware"
+    },
+    {
+      "id": "20",
+      "name": "Phần mềm Office 365",
+      "description": "Business Premium, 1 user",
+      "unit": "Nam",
+      "quantity": 50,
+      "unit_price": 3000000,
+      "total_price": 150000000,
+      "product_category": "software"
+    },
+    {
+      "id": "21",
+      "name": "Phần mềm Adobe Creative Cloud",
+      "description": "All Apps, 1 user",
+      "unit": "Nam",
+      "quantity": 5,
+      "unit_price": 5000000,
+      "total_price": 25000000,
+      "product_category": "software"
+    },
+    {
+      "id": "22",
+      "name": "Điện thoại iPhone 15",
+      "description": "128GB, Black",
+      "unit": "Cái",
+      "quantity": 10,
+      "unit_price": 20000000,
+      "total_price": 200000000,
+      "product_category": "hardware"
+    },
+    {
+      "id": "23",
+      "name": "Điện thoại Samsung Galaxy S24",
+      "description": "128GB, Titanium Gray",
+      "unit": "Cái",
+      "quantity": 10,
+      "unit_price": 18000000,
+      "total_price": 180000000,
+      "product_category": "hardware"
+    },
+    {
+      "id": "24",
+      "name": "Tablet iPad Air",
+      "description": "64GB, WiFi",
+      "unit": "Cái",
+      "quantity": 5,
+      "unit_price": 15000000,
+      "total_price": 75000000,
+      "product_category": "hardware"
+    },
+    {
+      "id": "25",
+      "name": "Phần mềm dự phòng dữ liệu",
+      "description": "Cloud backup, tự động",
+      "unit": "Bản",
+      "quantity": 1,
+      "unit_price": 8000000,
+      "total_price": 8000000,
+      "product_category": "software"
+    },
+    {
+      "id": "26",
+      "name": "NAS Synology DS923+",
+      "description": "4 bay, 8GB RAM",
+      "unit": "Cái",
+      "quantity": 3,
+      "unit_price": 25000000,
+      "total_price": 75000000,
+      "product_category": "hardware"
+    },
+    {
+      "id": "27",
+      "name": "Ổ cứng SSD Western Digital",
+      "description": "4TB, SATA 6Gb/s",
+      "unit": "Cái",
+      "quantity": 8,
+      "unit_price": 4000000,
+      "total_price": 32000000,
+      "product_category": "hardware"
+    },
+    {
+      "id": "28",
+      "name": "Phần mềm Zoom Pro",
+      "description": "Video conferencing, 100 host",
+      "unit": "Nam",
+      "quantity": 5,
+      "unit_price": 4000000,
+      "total_price": 20000000,
+      "product_category": "software"
+    },
+    {
+      "id": "29",
+      "name": "Phần mềm Microsoft Teams",
+      "description": "Collaboration, included in Office 365",
+      "unit": "Bản",
+      "quantity": 50,
+      "unit_price": 0,
+      "total_price": 0,
+      "product_category": "software"
+    },
+    {
+      "id": "30",
+      "name": "Phần mềm Slack",
+      "description": "Business Plus, 1 user",
+      "unit": "Nam",
+      "quantity": 50,
+      "unit_price": 1500000,
+      "total_price": 75000000,
+      "product_category": "software"
+    },
+    {
+      "id": "31",
+      "name": "Thẻ nhớ SanDisk",
+      "description": "128GB, Class 10",
+      "unit": "Cái",
+      "quantity": 50,
+      "unit_price": 200000,
+      "total_price": 10000000,
+      "product_category": "hardware"
+    },
+    {
+      "id": "32",
+      "name": "USB 3.0 SanDisk",
+      "description": "64GB",
+      "unit": "Cái",
+      "quantity": 100,
+      "unit_price": 150000,
+      "total_price": 15000000,
+      "product_category": "hardware"
+    },
+    {
+      "id": "33",
+      "name": "Phần mềm Jira Software",
+      "description": "Project management, 100 users",
+      "unit": "Nam",
+      "quantity": 1,
+      "unit_price": 10000000,
+      "total_price": 10000000,
+      "product_category": "software"
+    },
+    {
+      "id": "34",
+      "name": "Phần mềm Confluence",
+      "description": "Documentation, 100 users",
+      "unit": "Nam",
+      "quantity": 1,
+      "unit_price": 5000000,
+      "total_price": 5000000,
+      "product_category": "software"
+    },
+    {
+      "id": "35",
+      "name": "Phần mềm Bitbucket",
+      "description": "Git repository, 100 users",
+      "unit": "Nam",
+      "quantity": 1,
+      "unit_price": 3000000,
+      "total_price": 3000000,
+      "product_category": "software"
+    },
+    {
+      "id": "36",
+      "name": "Phần mềm GitLab",
+      "description": "DevOps platform, 100 users",
+      "unit": "Nam",
+      "quantity": 1,
+      "unit_price": 4000000,
+      "total_price": 4000000,
+      "product_category": "software"
+    },
+    {
+      "id": "37",
+      "name": "Phần mềm Jenkins",
+      "description": "CI/CD, open source",
+      "unit": "Bản",
+      "quantity": 1,
+      "unit_price": 0,
+      "total_price": 0,
+      "product_category": "software"
+    },
+    {
+      "id": "38",
+      "name": "Phần mềm Docker Enterprise",
+      "description": "Container management",
+      "unit": "Nam",
+      "quantity": 1,
+      "unit_price": 15000000,
+      "total_price": 15000000,
+      "product_category": "software"
+    },
+    {
+      "id": "39",
+      "name": "Phần mềm Kubernetes",
+      "description": "Orchestration, open source",
+      "unit": "Bản",
+      "quantity": 1,
+      "unit_price": 0,
+      "total_price": 0,
+      "product_category": "software"
+    },
+    {
+      "id": "40",
+      "name": "Máy chủ HP ProLiant DL380",
+      "description": "Gen10 Plus, CPU 2x Xeon, RAM 128GB",
+      "unit": "Cái",
+      "quantity": 2,
+      "unit_price": 80000000,
+      "total_price": 160000000,
+      "product_category": "hardware"
+    },
+    {
+      "id": "41",
+      "name": "Hệ thống lưu trữ HPE MSA",
+      "description": "2060, 24 bay, 50TB raw",
+      "unit": "Cái",
+      "quantity": 1,
+      "unit_price": 250000000,
+      "total_price": 250000000,
+      "product_category": "hardware"
+    },
+    {
+      "id": "42",
+      "name": "Phần mềm VMware vSphere",
+      "description": "Enterprise Plus, 4 CPU",
+      "unit": "Bản",
+      "quantity": 1,
+      "unit_price": 40000000,
+      "total_price": 40000000,
+      "product_category": "software"
+    },
+    {
+      "id": "43",
+      "name": "Phần mềm Veeam Backup",
+      "description": "Enterprise Plus, 10 instances",
+      "unit": "Bản",
+      "quantity": 1,
+      "unit_price": 35000000,
+      "total_price": 35000000,
+      "product_category": "software"
+    },
+    {
+      "id": "44",
+      "name": "Máy tính trạm Dell Precision",
+      "description": "Workstation, Xeon, RTX 4000",
+      "unit": "Cái",
+      "quantity": 3,
+      "unit_price": 60000000,
+      "total_price": 180000000,
+      "product_category": "hardware"
+    },
+    {
+      "id": "45",
+      "name": "Phần mềm AutoCAD",
+      "description": "License 1 năm",
+      "unit": "Bản",
+      "quantity": 5,
+      "unit_price": 25000000,
+      "total_price": 125000000,
+      "product_category": "software"
+    },
+    {
+      "id": "46",
+      "name": "Phần mềm SolidWorks",
+      "description": "Premium, 1 năm",
+      "unit": "Bản",
+      "quantity": 3,
+      "unit_price": 30000000,
+      "total_price": 90000000,
+      "product_category": "software"
+    },
+    {
+      "id": "47",
+      "name": "Phần mềm Revit",
+      "description": "Architecture, 1 năm",
+      "unit": "Bản",
+      "quantity": 2,
+      "unit_price": 25000000,
+      "total_price": 50000000,
+      "product_category": "software"
+    },
+    {
+      "id": "48",
+      "name": "Máy scan Fujitsu fi-7160",
+      "description": "Color, 60ppm, ADF",
+      "unit": "Cái",
+      "quantity": 4,
+      "unit_price": 12000000,
+      "total_price": 48000000,
+      "product_category": "hardware"
+    },
+    {
+      "id": "49",
+      "name": "Phần mềm Abbyy FineReader",
+      "description": "PDF OCR, Corporate",
+      "unit": "Bản",
+      "quantity": 5,
+      "unit_price": 3000000,
+      "total_price": 15000000,
+      "product_category": "software"
+    },
+    {
+      "id": "50",
+      "name": "Phần mềm Nitro PDF Pro",
+      "description": "Editor, 10 users",
+      "unit": "Bản",
+      "quantity": 10,
+      "unit_price": 2000000,
+      "total_price": 20000000,
+      "product_category": "software"
+    },
+    {
+      "id": "51",
+      "name": "Phần mềm Adobe Acrobat Pro",
+      "description": "DC, 1 user",
+      "unit": "Bản",
+      "quantity": 15,
+      "unit_price": 4000000,
+      "total_price": 60000000,
+      "product_category": "software"
+    },
+    {
+      "id": "52",
+      "name": "Máy chiếu Epson EB-X450",
+      "description": "XGA, 3600 lumens",
+      "unit": "Cái",
+      "quantity": 3,
+      "unit_price": 18000000,
+      "total_price": 54000000,
+      "product_category": "hardware"
+    },
+    {
+      "id": "53",
+      "name": "Màn chiếu 120 inch",
+      "description": "Motorized, 16:9",
+      "unit": "Cái",
+      "quantity": 3,
+      "unit_price": 5000000,
+      "total_price": 15000000,
+      "product_category": "hardware"
+    },
+    {
+      "id": "54",
+      "name": "Phần mềm Microsoft Project",
+      "description": "Professional, 1 user",
+      "unit": "Bản",
+      "quantity": 3,
+      "unit_price": 5000000,
+      "total_price": 15000000,
+      "product_category": "software"
+    },
+    {
+      "id": "55",
+      "name": "Hệ thống âm thanh Bose Panaray",
+      "description": "Conference speakerphone",
+      "unit": "Bộ",
+      "quantity": 5,
+      "unit_price": 15000000,
+      "total_price": 75000000,
+      "product_category": "hardware"
+    }
+  ]
+}
