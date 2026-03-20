@@ -9,12 +9,12 @@
 - [ ] **PDF-01**: User can export quotation as PDF file
 - [ ] **PDF-02**: PDF export preserves header information (company name, logo, date) from Excel
 - [ ] **PDF-03**: PDF export preserves footer information (creator, signature) from Excel
-- [ ] **PDF-04**: PDF format is simple, professional, print-ready (standard black & white)
+- [x] **PDF-04**: PDF format is simple, professional, print-ready (standard black & white)
 - [ ] **PDF-05**: Image column is hidden in PDF export (product photos not shown)
 - [ ] **PDF-06**: Column widths are auto-fitted to A4 paper width in PDF
 
 ### Vietnamese Language Support
-- [ ] **LANG-01**: Vietnamese characters with diacritics (a, a, a, e, e, u, u, u, etc.) display correctly in PDF
+- [x] **LANG-01**: Vietnamese characters with diacritics (a, a, a, e, e, u, u, u, etc.) display correctly in PDF
 
 ### UI Integration
 - [ ] **UI-01**: User can select PDF format for export (from format dropdown or buttons)
@@ -53,10 +53,10 @@ Which phases cover which requirements. Updated during roadmap creation.
 | PDF-01 | Phase 1 | Pending |
 | PDF-02 | Phase 1 | Pending |
 | PDF-03 | Phase 1 | Pending |
-| PDF-04 | Phase 1 | Pending |
+| PDF-04 | Phase 1 | Complete |
 | PDF-05 | Phase 1 | Pending |
 | PDF-06 | Phase 1 | Pending |
-| LANG-01 | Phase 1 | Pending |
+| LANG-01 | Phase 1 | Complete |
 | UI-01 | Phase 3 | Pending |
 | UI-02 | Phase 3 | Pending |
 | UI-03 | Phase 3 | Pending |
