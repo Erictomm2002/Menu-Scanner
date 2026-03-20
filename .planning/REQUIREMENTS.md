@@ -14,7 +14,7 @@
 - [ ] **PDF-06**: Column widths are auto-fitted to A4 paper width in PDF
 
 ### Vietnamese Language Support
-- [ ] **LANG-01**: Vietnamese characters with diacritics (á, à, ả, ẹ, ể, ự, ư, ừ, ự, etc.) display correctly in PDF
+- [ ] **LANG-01**: Vietnamese characters with diacritics (a, a, a, e, e, u, u, u, etc.) display correctly in PDF
 
 ### UI Integration
 - [ ] **UI-01**: User can select PDF format for export (from format dropdown or buttons)
@@ -57,18 +57,18 @@ Which phases cover which requirements. Updated during roadmap creation.
 | PDF-05 | Phase 1 | Pending |
 | PDF-06 | Phase 1 | Pending |
 | LANG-01 | Phase 1 | Pending |
-| UI-01 | Phase 2 | Pending |
-| UI-02 | Phase 2 | Pending |
-| UI-03 | Phase 2 | Pending |
-| PERF-01 | Phase 3 | Pending |
-| PERF-02 | Phase 3 | Pending |
-| PERF-03 | Phase 3 | Pending |
+| UI-01 | Phase 3 | Pending |
+| UI-02 | Phase 3 | Pending |
+| UI-03 | Phase 3 | Pending |
+| PERF-01 | Phase 2 | Pending |
+| PERF-02 | Phase 2 | Pending |
+| PERF-03 | Phase 2 | Pending |
 
 **Coverage:**
 - v1 requirements: 12 total
-- Mapped to phases: 0 (pending roadmap)
-- Unmapped: 12 ⚠️
+- Mapped to phases: 12
+- Unmapped: 0
 
 ---
 *Requirements defined: 2026-03-20*
-*Last updated: 2026-03-20 after initial definition*
+*Last updated: 2026-03-20 after roadmap creation*
