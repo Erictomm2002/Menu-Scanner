@@ -2,7 +2,7 @@
 
 ## Overview
 
-This roadmap delivers PDF export functionality for the Quotation Tool, enabling users to export quotations as print-ready A4 PDF documents. The work builds on the existing Excel export infrastructure, adding server-side PDF generation with Vietnamese language support, proper A4 layout with auto-fitted columns, and multi-page pagination. The project follows a dependency-driven approach: core PDF generation first, then API integration, followed by UI enhancements, and finally performance validation.
+This roadmap delivers PDF export functionality for Quotation Tool, enabling users to export quotations as print-ready A4 PDF documents. The work builds on the existing Excel export infrastructure, adding server-side PDF generation with Vietnamese language support, proper A4 layout with auto-fitted columns, and multi-page pagination. The project follows a dependency-driven approach: core PDF generation first, then API integration, followed by UI enhancements, and finally performance validation.
 
 ## Phases
 
@@ -84,11 +84,11 @@ Plans:
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 → 2 → 3 → 4
+Phases execute in numeric order: 1 -> 2 -> 3 -> 4
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. PDF Generation Core | 0/3 | Not started | - |
+| 1. PDF Generation Core | 0/3 | Planning Complete | - |
 | 2. API Integration | 0/2 | Not started | - |
 | 3. UI Integration & Styling | 0/2 | Not started | - |
 | 4. Performance & Validation | 0/2 | Not started | - |
