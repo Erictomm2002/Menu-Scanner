@@ -1,6 +1,6 @@
 "use client";
 
-import { Download, Save } from "lucide-react";
+import { Download, FileText, Save } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { QuotationDiscount } from "@/types/quotation";
 
@@ -77,17 +77,21 @@ export function QuotationSummary({
 
 interface QuotationFooterProps {
   onExport: () => void;
+  onExportPdf: () => void;
   onSave: () => void;
   isSaving?: boolean;
   isExporting?: boolean;
+  isExportingPdf?: boolean;
   itemCount: number;
 }
 
 export function QuotationFooter({
   onExport,
+  onExportPdf,
   onSave,
   isSaving = false,
   isExporting = false,
+  isExportingPdf = false,
   itemCount = 0,
 }: QuotationFooterProps) {
   return (
@@ -108,6 +112,15 @@ export function QuotationFooter({
       >
         <Download className="w-5 h-5" />
         {isExporting ? "Đang xuất..." : "Xuất Excel"}
+      </Button>
+
+      <Button
+        variant="primary"
+        onClick={onExportPdf}
+        disabled={itemCount === 0 || isExportingPdf}
+      >
+        <FileText className="w-5 h-5" />
+        {isExportingPdf ? "Đang xuất..." : "Xuất PDF"}
       </Button>
     </div>
   );

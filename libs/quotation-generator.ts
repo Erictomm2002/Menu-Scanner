@@ -54,13 +54,26 @@ const CATEGORY_FILL: ExcelJS.Fill = {
   fgColor: { argb: "FFB4C6E7" },
 };
 
+// Column widths adjusted for A4 format
+// A4 width: 210mm, usable: ~190mm after margins
+// Using character widths that fit within A4 (approx 7.2px per char in Arial 11pt)
 const COLUMN_WIDTHS = [
-  { width: 40 },
-  { width: 50 },
-  { width: 12 },
-  { width: 10 },
-  { width: 15 },
-  { width: 15 },
+  { width: 25 }, // Product name (image) - reduced from 40
+  { width: 35 }, // Description - reduced from 50
+  { width: 12 }, // Unit
+  { width: 10 }, // Quantity
+  { width: 12 }, // Unit price
+  { width: 12 }, // Total
+];
+
+// PDF-specific column widths (narrower for A4)
+const PDF_COLUMN_WIDTHS = [
+  { width: 22 }, // Product name - compact for PDF
+  { width: 45 }, // Description - compact for PDF
+  { width: 12 }, // Unit
+  { width: 10 }, // Quantity
+  { width: 15 }, // Unit price
+  { width: 15 }, // Total
 ];
 
 const IMAGE_PATTERN = /\[Image\s*#\d+\]/gi;
@@ -100,6 +113,12 @@ export async function generateQuotationExcel(
     throw new Error("Worksheet not found in template");
   }
 
+  // Remove all sheets except the first one (the one being modified)
+  while (workbook.worksheets.length > 1) {
+    const lastSheet = workbook.worksheets[workbook.worksheets.length - 1];
+    workbook.removeWorksheet(lastSheet.id);
+  }
+
   worksheet.columns = COLUMN_WIDTHS;
 
   // Remove product images from template but KEEP the logo (first image)
@@ -131,7 +150,9 @@ export async function generateQuotationExcel(
   }
 
   // Helper: get subproducts for a specific parent item from the original items array
-  const getSubproductsForParent = (parentProductId: string): QuotationItem[] => {
+  const getSubproductsForParent = (
+    parentProductId: string,
+  ): QuotationItem[] => {
     const subproduct = items.filter(
       (item) => item.is_subproduct && item.parent_item_id == parentProductId,
     );
@@ -142,7 +163,7 @@ export async function generateQuotationExcel(
   const getItemWithSubproducts = (
     parentItem: QuotationItem,
   ): QuotationItem[] => {
-    const subproducts = getSubproductsForParent(parentItem.product_id ?? '');
+    const subproducts = getSubproductsForParent(parentItem.product_id ?? "");
     return [parentItem, ...subproducts];
   };
 
@@ -205,7 +226,198 @@ export async function generateQuotationExcel(
         items,
         originalIndex,
         workbook,
-        getSubproductsForParent
+        getSubproductsForParent,
+      );
+    }
+    // Add hardware total row immediately after hardware items
+    if (hardwareTotal > 0) {
+      currentRow = addHardwareTotalRow(worksheet, currentRow, hardwareTotal);
+    }
+  }
+
+  // ---------- Summary rows ----------
+  currentRow = addSummarySection(
+    worksheet,
+    currentRow,
+    items,
+    softwareItems,
+    hardwareItems,
+    quotation,
+    softwareTotal,
+    hardwareTotal,
+  );
+
+  // ---------- Footer Notes ----------
+  currentRow = addFooterNotes(worksheet, currentRow);
+
+  // ---------- Custom Notes (if provided) ----------
+  if (quotation.notes && quotation.notes.trim()) {
+    currentRow++;
+    const notesCell = worksheet.getCell(`A${currentRow}`);
+    notesCell.value = `Ghi chú bổ sung: ${quotation.notes}`;
+    notesCell.font = { ...FONT_STYLES.BODY, italic: true };
+    notesCell.alignment = {
+      horizontal: "left",
+      vertical: "top",
+      wrapText: true,
+    };
+    notesCell.border = THIN_BORDER;
+
+    // Clear cells B-F and add borders
+    for (let col = 2; col <= 6; col++) {
+      const cell = worksheet.getCell(currentRow, col);
+      cell.value = null;
+      cell.border = THIN_BORDER;
+    }
+    const notesRow = worksheet.getRow(currentRow);
+    notesRow.height = 40;
+  }
+
+  return new Uint8Array(await workbook.xlsx.writeBuffer());
+}
+
+/**
+ * Generate quotation Excel specifically for PDF export.
+ * This version excludes product images and uses narrower column widths for A4 format.
+ */
+export async function generateQuotationExcelPdf(
+  quotation: Quotation,
+  items: QuotationItem[],
+): Promise<Uint8Array> {
+  const templatePath = join(
+    process.cwd(),
+    "public",
+    "templates",
+    "quotation-template.xlsx",
+  );
+  const fileBuffer = Buffer.from(readFileSync(templatePath)) as Buffer;
+
+  const workbook = new ExcelJS.Workbook();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  await workbook.xlsx.load(fileBuffer as any);
+
+  const sheetName = "Gói 01 năm Fabi + full thiết bị";
+  const worksheet = workbook.getWorksheet(sheetName) || workbook.worksheets[0];
+
+  if (!worksheet) {
+    throw new Error("Worksheet not found in template");
+  }
+
+  // Remove all sheets except the first one (the one being modified)
+  while (workbook.worksheets.length > 1) {
+    const lastSheet = workbook.worksheets[workbook.worksheets.length - 1];
+    workbook.removeWorksheet(lastSheet.id);
+  }
+
+  // Use PDF-specific (narrower) column widths for A4 format
+  worksheet.columns = PDF_COLUMN_WIDTHS;
+
+  // Remove product images from template but KEEP the logo (first image)
+  removeTemplateProductImages(worksheet);
+
+  // Clear ALL template data from dataStartRow to the end of the sheet
+  clearAllTemplateData(worksheet, TEMPLATE_MAPPING.dataStartRow);
+
+  // Fill customer info
+  if (quotation.customer_name) {
+    const cell = worksheet.getCell(TEMPLATE_MAPPING.customerName);
+    cell.value = quotation.customer_name;
+    cell.font = { ...FONT_STYLES.BODY };
+  }
+  if (quotation.customer_phone) {
+    const cell = worksheet.getCell(TEMPLATE_MAPPING.customerPhone);
+    cell.value = quotation.customer_phone;
+    cell.font = { ...FONT_STYLES.BODY };
+  }
+  if (quotation.customer_model) {
+    const cell = worksheet.getCell(TEMPLATE_MAPPING.customerModel);
+    cell.value = quotation.customer_model;
+    cell.font = { ...FONT_STYLES.BODY };
+  }
+  if (quotation.customer_address) {
+    const cell = worksheet.getCell(TEMPLATE_MAPPING.customerAddress);
+    cell.value = quotation.customer_address;
+    cell.font = { ...FONT_STYLES.BODY };
+  }
+
+  // Helper: get subproducts for a specific parent item from the original items array
+  const getSubproductsForParent = (
+    parentProductId: string,
+  ): QuotationItem[] => {
+    const subproduct = items.filter(
+      (item) => item.is_subproduct && item.parent_item_id == parentProductId,
+    );
+    return subproduct;
+  };
+
+  // Helper: get all items (parent + subproducts) for a parent
+  const getItemWithSubproducts = (
+    parentItem: QuotationItem,
+  ): QuotationItem[] => {
+    const subproducts = getSubproductsForParent(parentItem.product_id ?? "");
+    return [parentItem, ...subproducts];
+  };
+
+  // Categorize items - exclude subproducts from the parent arrays
+  const softwareItems = items.filter(
+    (item) => isSoftwareItem(item) && !item.is_subproduct,
+  );
+  const hardwareItems = items.filter(
+    (item) => !isSoftwareItem(item) && !item.is_subproduct,
+  );
+
+  let currentRow = TEMPLATE_MAPPING.dataStartRow;
+
+  // Calculate category totals
+  const calculateCategoryTotal = (parentItems: QuotationItem[]) =>
+    parentItems.reduce((sum, parentItem) => {
+      const group = getItemWithSubproducts(parentItem);
+      return (
+        sum +
+        group.reduce(
+          (itemSum, item) => itemSum + (item.is_free ? 0 : item.total_price),
+          0,
+        )
+      );
+    }, 0);
+
+  const softwareTotal = calculateCategoryTotal(softwareItems);
+  const hardwareTotal = calculateCategoryTotal(hardwareItems);
+
+  // ---------- A. PHẦN MỀM ----------
+  if (softwareItems.length > 0) {
+    currentRow = addCategoryHeader(worksheet, currentRow, "A. PHẦN MỀM");
+    for (const item of softwareItems) {
+      const originalIndex = items.indexOf(item);
+      currentRow = await fillProductRowWithSubproductsForPdf(
+        worksheet,
+        currentRow,
+        item,
+        items,
+        originalIndex,
+        workbook,
+        getSubproductsForParent,
+      );
+    }
+    // Add software total row immediately after software items (before hardware category)
+    if (softwareTotal > 0) {
+      currentRow = addSoftwareTotalRow(worksheet, currentRow, softwareTotal);
+    }
+  }
+
+  // ---------- B. PHẦN CỨNG ----------
+  if (hardwareItems.length > 0) {
+    currentRow = addCategoryHeader(worksheet, currentRow, "B. PHẦN CỨNG");
+    for (const item of hardwareItems) {
+      const originalIndex = items.indexOf(item);
+      currentRow = await fillProductRowWithSubproductsForPdf(
+        worksheet,
+        currentRow,
+        item,
+        items,
+        originalIndex,
+        workbook,
+        getSubproductsForParent,
       );
     }
     // Add hardware total row immediately after hardware items
@@ -367,16 +579,16 @@ function addHardwareTotalRow(
 
 // Utility function tính offset căn giữa ảnh trong ô
 function calcImageCenterOffset(params: {
-  colWidthChars: number;  // width của column (đơn vị chars)
-  rowHeightPt: number;    // height của row (đơn vị pt)
-  imgWidth: number;       // px
-  imgHeight: number;      // px
+  colWidthChars: number; // width của column (đơn vị chars)
+  rowHeightPt: number; // height của row (đơn vị pt)
+  imgWidth: number; // px
+  imgHeight: number; // px
 }) {
   const { colWidthChars, rowHeightPt, imgWidth, imgHeight } = params;
 
-  const COL_CHAR_TO_PX = 7.1;   // Arial: ~7.1px per char
-  const ROW_PT_TO_PX = 1.333;   // 1pt ≈ 1.333px
-  const PX_TO_EMU = 9525;        // 1px = 9525 EMU
+  const COL_CHAR_TO_PX = 7.1; // Arial: ~7.1px per char
+  const ROW_PT_TO_PX = 1.333; // 1pt ≈ 1.333px
+  const PX_TO_EMU = 9525; // 1px = 9525 EMU
 
   const colWidthPx = colWidthChars * COL_CHAR_TO_PX;
   const rowHeightPx = rowHeightPt * ROW_PT_TO_PX;
@@ -429,15 +641,14 @@ async function fillProductRowWithSubproducts(
         });
 
         const COL_A_WIDTH = 40; // chars — phải khớp với chỗ bạn set column width
-        const IMG_SIZE = 100;   // px
+        const IMG_SIZE = 100; // px
 
         const { colOff, rowOff } = calcImageCenterOffset({
           colWidthChars: COL_A_WIDTH,
-          rowHeightPt: productRow.height,  // lấy trực tiếp từ row đã set ở trên
+          rowHeightPt: productRow.height, // lấy trực tiếp từ row đã set ở trên
           imgWidth: IMG_SIZE,
           imgHeight: IMG_SIZE,
         });
-
 
         // Center image horizontally in column A
         // Column A width is 40 chars ≈ 284px (at ~7.1px per char in Arial)
@@ -530,7 +741,109 @@ async function fillProductRowWithSubproducts(
 
   // Add subproducts - use the helper function to get all subproducts for this parent
   if (!item.is_subproduct) {
-    const subproducts = getSubproductsForParent(item.product_id ?? '');
+    const subproducts = getSubproductsForParent(item.product_id ?? "");
+    const firstSubproductRow = nextRow;
+    for (const subproduct of subproducts) {
+      nextRow = fillSubproductRow(worksheet, nextRow, subproduct);
+    }
+    const lastSubproductRow = nextRow - 1;
+
+    // Merge parent row's column A with all subproduct rows' column A
+    if (subproducts.length > 0) {
+      worksheet.mergeCells(`A${row}:A${lastSubproductRow}`);
+    }
+  }
+
+  return nextRow;
+}
+
+// ---------------------------------------------------------------------------
+// Product row with subproducts for PDF (WITHOUT images)
+// ---------------------------------------------------------------------------
+async function fillProductRowWithSubproductsForPdf(
+  worksheet: ExcelJS.Worksheet,
+  row: number,
+  item: QuotationItem,
+  allItems: QuotationItem[],
+  currentItemIndex: number,
+  workbook: ExcelJS.Workbook,
+  getSubproductsForParent: (parentProductId: string) => QuotationItem[],
+): Promise<number> {
+  // Calculate row height based on description length only (no images)
+  const descLength = cleanDescription(item.description).length;
+  const baseRowHeight = 30; // Fixed height for PDF (no images)
+  const contentRowHeight = estimateRowHeight(descLength, 50);
+  const productRow = worksheet.getRow(row);
+  productRow.height = Math.max(baseRowHeight, contentRowHeight);
+
+  // Name cell — bold, centered both horizontally and vertically
+  const nameCell = worksheet.getCell(`A${row}`);
+  nameCell.value = item.name;
+  nameCell.font = { ...FONT_STYLES.PRODUCT_NAME };
+  nameCell.alignment = {
+    horizontal: "center",
+    vertical: "middle",
+    wrapText: true,
+  };
+  nameCell.border = THIN_BORDER;
+
+  // Description cell
+  const descCell = worksheet.getCell(`B${row}`);
+  const cleanedDescription = cleanDescription(item.description);
+  const descriptionValue = parseDescriptionForExcel(cleanedDescription);
+  descCell.value = descriptionValue;
+  descCell.font = { ...FONT_STYLES.DESCRIPTION };
+  descCell.alignment = { horizontal: "left", vertical: "top", wrapText: true };
+  descCell.border = THIN_BORDER;
+
+  // Unit cell
+  const unitCell = worksheet.getCell(`C${row}`);
+  unitCell.value = item.unit;
+  unitCell.font = { ...FONT_STYLES.NUMBER };
+  unitCell.alignment = { horizontal: "center", vertical: "middle" };
+  unitCell.border = THIN_BORDER;
+
+  // Quantity cell
+  const qtyCell = worksheet.getCell(`D${row}`);
+  qtyCell.value = item.quantity;
+  qtyCell.font = { ...FONT_STYLES.NUMBER };
+  qtyCell.numFmt = "#,##0";
+  qtyCell.alignment = { horizontal: "center", vertical: "middle" };
+  qtyCell.border = THIN_BORDER;
+
+  // Unit Price cell
+  const priceCell = worksheet.getCell(`E${row}`);
+  if (item.is_free || item.unit_price === 0) {
+    priceCell.value = "Miễn phí";
+    priceCell.font = { ...FONT_STYLES.FREE };
+    priceCell.alignment = { horizontal: "center", vertical: "middle" };
+  } else {
+    priceCell.value = item.unit_price;
+    priceCell.font = { ...FONT_STYLES.NUMBER };
+    priceCell.numFmt = "#,##0";
+    priceCell.alignment = { horizontal: "center", vertical: "middle" };
+  }
+  priceCell.border = THIN_BORDER;
+
+  // Total cell
+  const totalCell = worksheet.getCell(`F${row}`);
+  if (item.is_free || item.unit_price === 0) {
+    totalCell.value = "Miễn phí";
+    totalCell.font = { ...FONT_STYLES.FREE, bold: true };
+    totalCell.alignment = { horizontal: "center", vertical: "middle" };
+  } else {
+    totalCell.value = item.total_price;
+    totalCell.font = { ...FONT_STYLES.NUMBER, bold: true };
+    totalCell.numFmt = "#,##0";
+    totalCell.alignment = { horizontal: "center", vertical: "middle" };
+  }
+  totalCell.border = THIN_BORDER;
+
+  let nextRow = row + 1;
+
+  // Add subproducts - use the helper function to get all subproducts for this parent
+  if (!item.is_subproduct) {
+    const subproducts = getSubproductsForParent(item.product_id ?? "");
     const firstSubproductRow = nextRow;
     for (const subproduct of subproducts) {
       nextRow = fillSubproductRow(worksheet, nextRow, subproduct);
@@ -570,9 +883,14 @@ function fillSubproductRow(
   const cleanedDescription = cleanDescription(item.description);
   const descriptionValue = parseDescriptionForExcel(cleanedDescription);
   // Combine name and description with line break
-  descCell.value = item.name + (cleanedDescription ? "\n" + descriptionValue : "");
+  descCell.value =
+    item.name + (cleanedDescription ? "\n" + descriptionValue : "");
   descCell.font = { ...FONT_STYLES.SUBPRODUCT, bold: true };
-  descCell.alignment = { horizontal: "left", vertical: "middle", wrapText: true };
+  descCell.alignment = {
+    horizontal: "left",
+    vertical: "middle",
+    wrapText: true,
+  };
   descCell.border = THIN_BORDER;
 
   const unitCell = worksheet.getCell(`C${row}`);
@@ -830,11 +1148,13 @@ function removeTemplateProductImages(worksheet: ExcelJS.Worksheet): void {
 
 // ---------------------------------------------------------------------------
 // Clear ALL template data from startRow to the last used row
+// For PDF export: clear all extra pages, keep only page 1
 // ---------------------------------------------------------------------------
 
 function clearAllTemplateData(
   worksheet: ExcelJS.Worksheet,
   startRow: number,
+  keepOnlyFirstPage: boolean = false,
 ): void {
   // Determine the last row that has data
   const lastRow = worksheet.rowCount;
@@ -847,7 +1167,14 @@ function clearAllTemplateData(
     if (!range || typeof range !== "string") continue;
 
     const parsedRange = parseExcelRange(range);
-    if (parsedRange && parsedRange.top >= startRow) {
+    // Clear all pages except page 1 when in PDF mode
+    const shouldRemove = keepOnlyFirstPage
+      ? // Remove all pages except page 1 (rows 1-19 are page 1)
+        parsedRange && parsedRange.bottom > 19
+      : // Original behavior
+        parsedRange && parsedRange.top >= startRow;
+
+    if (shouldRemove) {
       try {
         worksheet.unMergeCells(range);
       } catch (e) {
@@ -873,11 +1200,14 @@ function clearAllTemplateData(
 // ---------------------------------------------------------------------------
 
 function estimateRowHeight(textLength: number, colWidthChars: number): number {
-  if (textLength === 0) return 20;
+  if (textLength === 0) return 30;
   // Approximate number of lines the text will wrap to
   const estimatedLines = Math.ceil(textLength / colWidthChars);
   // ~18px per line of text (Times New Roman 11-12pt)
-  const height = Math.max(20, estimatedLines * 18);
+  // Add padding: 10px top + 10px bottom for better readability
+  const contentHeight = estimatedLines * 18;
+  const padding = 20; // 10px top + 10px bottom
+  const height = Math.max(30, contentHeight + padding);
   // Cap at a reasonable max
   return Math.min(height, 400);
 }

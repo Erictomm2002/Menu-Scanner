@@ -21,6 +21,7 @@ export default function QuotationPage() {
   const [customerModel, setCustomerModel] = useState("");
   const [isSaving, setIsSaving] = useState(false);
   const [isExporting, setIsExporting] = useState(false);
+  const [isExportingPdf, setIsExportingPdf] = useState(false);
   const [savedQuotationId, setSavedQuotationId] = useState<string | null>(null);
   const [message, setMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
 
@@ -225,6 +226,57 @@ export default function QuotationPage() {
     }
   };
 
+  const handleExportPdf = async () => {
+    if (items.length === 0) {
+      setMessage({ type: "error", text: "Vui lòng chọn ít nhất một sản phẩm" });
+      return;
+    }
+
+    setIsExportingPdf(true);
+    setMessage(null);
+
+    try {
+      // If not saved, save first and get returned ID
+      let quotationId: string | null = savedQuotationId || null;
+      if (!quotationId) {
+        const savedId = await handleSave();
+        if (!savedId) {
+          setMessage({ type: "error", text: "Lỗi khi lưu báo giá trước khi export PDF" });
+          return;
+        }
+        quotationId = savedId;
+      }
+
+      // Export PDF
+      const response = await fetch(`/api/quotations/${quotationId}/export-pdf`, {
+        method: "POST",
+      });
+
+      if (response.ok) {
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        const quoteNumber = `BG${new Date().toISOString().slice(0, 10).replace(/-/g, "")}${Math.floor(Math.random() * 10000).toString().padStart(4, "0")}`;
+        a.download = `BaoGia_${quoteNumber}.pdf`;
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+        setMessage({ type: "success", text: "Export PDF thành công" });
+        setTimeout(() => setMessage(null), 3000);
+      } else {
+        const data = await response.json();
+        setMessage({ type: "error", text: data.error || "Lỗi khi export PDF" });
+      }
+    } catch (error) {
+      console.error("Error exporting PDF:", error);
+      setMessage({ type: "error", text: "Lỗi khi export PDF" });
+    } finally {
+      setIsExportingPdf(false);
+    }
+  };
+
   return (
     <main className="min-h-screen bg-[#f8fafc]">
       {/* Header */}
@@ -293,9 +345,11 @@ export default function QuotationPage() {
           onUpdateDiscount={handleUpdateDiscount}
           onRemoveDiscount={handleRemoveDiscount}
           onExport={handleExport}
+          onExportPdf={handleExportPdf}
           onSave={handleSave}
           isSaving={isSaving}
           isExporting={isExporting}
+          isExportingPdf={isExportingPdf}
         />
       </div>
 

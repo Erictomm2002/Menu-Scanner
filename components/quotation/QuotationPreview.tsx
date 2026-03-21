@@ -40,9 +40,11 @@ interface QuotationPreviewProps {
   onUpdateDiscount: (index: number, discount: QuotationDiscount) => void;
   onRemoveDiscount: (index: number) => void;
   onExport: () => void;
+  onExportPdf: () => void;
   onSave: () => void;
   isSaving?: boolean;
   isExporting?: boolean;
+  isExportingPdf?: boolean;
 }
 
 export function QuotationPreview({
@@ -62,9 +64,11 @@ export function QuotationPreview({
   onUpdateDiscount,
   onRemoveDiscount,
   onExport,
+  onExportPdf,
   onSave,
   isSaving = false,
   isExporting = false,
+  isExportingPdf = false,
 }: QuotationPreviewProps) {
   // Handle parent-child deletion when removing an item
   const handleItemRemove = (index: number) => {
@@ -274,9 +278,11 @@ export function QuotationPreview({
         {/* Footer Actions */}
         <QuotationFooter
           onExport={onExport}
+          onExportPdf={onExportPdf}
           onSave={onSave}
           isSaving={isSaving}
           isExporting={isExporting}
+          isExportingPdf={isExportingPdf}
           itemCount={items.length}
         />
       </div>
