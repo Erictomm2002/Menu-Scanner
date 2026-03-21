@@ -26,7 +26,7 @@ async function testMultipagePDF() {
   try {
     const pdf = await generateQuotationPDF(
       largeSample as any,
-      largeSample.items
+      largeSample.items as any
     );
 
     const outputPath = join(process.cwd(), 'test-output.pdf');

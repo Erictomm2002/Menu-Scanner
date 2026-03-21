@@ -179,7 +179,7 @@ function ProductRow({ item }: { item: QuotationItem }) {
     <View
       style={[
         styles.tableRow,
-        item.is_subproduct ? styles.subproductRow : null,
+        ...(item.is_subproduct ? [styles.subproductRow] : []),
       ]}
     >
       <Text style={styles.colName}>{item.name}</Text>
