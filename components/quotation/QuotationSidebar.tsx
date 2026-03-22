@@ -10,6 +10,7 @@ import {
 import { Search, Plus, Check, Image as ImageIcon } from "lucide-react";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
+import clsx from "clsx";
 
 interface QuotationSidebarProps {
   onAddItem: (item: QuotationItem | QuotationItem[]) => void;
@@ -103,13 +104,15 @@ export function QuotationSidebar({
         </h2>
 
         {/* Category Filter */}
-        <div className="flex bg-slate-100 p-1 rounded-lg mb-4">
+        <div className="flex bg-slate-100 border p-1 rounded-lg mb-4">
           <Button
             variant={
               categoryFilter === ProductCategory.SOFTWARE ? "primary" : "ghost"
             }
             size="md"
-            className="flex-1"
+            className={clsx("flex-1", {
+              "bg-blue-600 text-white": categoryFilter === ProductCategory.SOFTWARE,
+            })}
             onClick={() => setCategoryFilter(ProductCategory.SOFTWARE)}
           >
             Phần mềm
@@ -119,7 +122,9 @@ export function QuotationSidebar({
               categoryFilter === ProductCategory.HARDWARE ? "primary" : "ghost"
             }
             size="md"
-            className="flex-1"
+            className={clsx("flex-1", {
+              "bg-blue-600 text-white": categoryFilter === ProductCategory.HARDWARE,
+            })}
             onClick={() => setCategoryFilter(ProductCategory.HARDWARE)}
           >
             Phần cứng

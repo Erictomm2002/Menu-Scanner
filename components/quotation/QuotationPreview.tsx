@@ -150,7 +150,7 @@ export function QuotationPreview({
 
   return (
     <section
-      className="flex-1 p-8 bg-[var(--background-light)] overflow-y-auto"
+      className="flex-1 p-8 bg-slate-50 overflow-y-auto"
       aria-label="Xem trước báo giá"
     >
       <div className="max-w-5xl mx-auto bg-white shadow-xl rounded-xl border border-slate-300 flex flex-col min-h-full">
