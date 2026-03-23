@@ -25,13 +25,24 @@ export function QuotationForm({
   onCustomerModelChange,
 }: QuotationFormProps) {
   return (
-    <div className="bg-white shadow-sm rounded-xl p-6 border border-slate-300">
-      <h2 className="text-xl font-bold text-slate-900 mb-4 flex items-center gap-2">
+    <div className="bg-white shadow-sm rounded-xl p-4 md:p-6 border border-slate-300">
+      {/* Mobile Header */}
+      <div className="flex items-center gap-2 mb-4 lg:hidden">
+        <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+          <User className="w-4 h-4 text-primary" />
+        </div>
+        <h2 className="text-base font-bold text-slate-900">
+          Thông tin khách hàng
+        </h2>
+      </div>
+
+      {/* Desktop Header */}
+      <h2 className="text-xl font-bold text-slate-900 mb-4 hidden lg:flex items-center gap-2">
         <User className="w-5 h-5 text-[#2463eb]" aria-hidden="true" />
         Thông tin khách hàng
       </h2>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
         <div className="flex flex-col items-start gap-2">
           <label htmlFor="customer-name" className="text-sm font-medium text-slate-700 whitespace-nowrap">
             Người nhận
@@ -42,7 +53,7 @@ export function QuotationForm({
             placeholder="Nguyễn Văn A"
             value={customerName}
             onChange={(e) => onCustomerNameChange(e.target.value)}
-            className="flex-1"
+            className="flex-1 w-full"
           />
         </div>
 
@@ -57,7 +68,7 @@ export function QuotationForm({
             type="tel"
             value={customerPhone}
             onChange={(e) => onCustomerPhoneChange(e.target.value)}
-            className="flex-1"
+            className="flex-1 w-full"
           />
         </div>
 
@@ -71,7 +82,7 @@ export function QuotationForm({
             placeholder="Toyota Camry 2022"
             value={customerModel}
             onChange={(e) => onCustomerModelChange(e.target.value)}
-            className="flex-1"
+            className="flex-1 w-full"
           />
         </div>
 
@@ -85,7 +96,7 @@ export function QuotationForm({
             placeholder="Quận 1, TP. Hồ Chí Minh"
             value={customerAddress}
             onChange={(e) => onCustomerAddressChange(e.target.value)}
-            className="flex-1"
+            className="flex-1 w-full"
           />
         </div>
       </div>

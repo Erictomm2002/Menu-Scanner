@@ -4,7 +4,7 @@ import { useState } from "react"
 import { Button } from "../ui/Button"
 import { Card, CardContent } from "../ui/Card"
 import { Input } from "../ui/Input"
-import { Trash2, ArrowLeft, Plus, ChevronRight, ChevronLeft } from "lucide-react"
+import { Trash2, ArrowLeft, Plus, ChevronRight, ChevronLeft, ChevronDown, Search } from "lucide-react"
 import { MenuCategory, MenuData, MenuItem } from "@/types/menu"
 import { motion, AnimatePresence } from "framer-motion"
 
@@ -155,224 +155,199 @@ export default function MenuEditScreenOption2({
     onChange({ ...data, categories: updatedCategories })
   }
 
-  return (
-    <div className="min-h-screen py-8 px-4">
-      <div className="max-w-6xl mx-auto">
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="bg-white/5 backdrop-blur-md border border-white/20 rounded-2xl px-6 py-4 mb-8 flex items-center gap-4"
-        >
-          <Button variant="ghost" size="md" onClick={onBack} className="text-white/70 hover:text-white hover:bg-white/10">
-            <ChevronLeft className="w-6 h-6" />
-          </Button>
-          <div>
-            <motion.p
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.2 }}
-              className="font-semibold text-2xl text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-blue-400 to-cyan-400"
-            >
-              {data.restaurantName}
-            </motion.p>
-            <p className="text-white/70 text-lg">Chỉnh sửa menu của bạn</p>
-          </div>
-        </motion.div>
+  const totalItems = data.categories.reduce((sum, cat) => sum + cat.items.length, 0)
 
-        {/* Add Category Button */}
-        <div className="mb-6 flex justify-end gap-2">
-          <Button
+  return (
+    <div className="min-h-screen bg-surface">
+      {/* Header */}
+      <div className="bg-surface-container-lowest shadow-sm sticky top-0 z-10">
+        <div className="max-w-6xl mx-auto px-6 py-4">
+          <div className="flex items-center gap-4">
+            <div className="flex-1 min-w-0">
+              <input
+                type="text"
+                value={data.restaurantName}
+                onChange={(e) => handleRestaurantNameChange(e.target.value)}
+                className="text-xl font-bold text-on-surface bg-transparent border-0 outline-none w-full"
+                placeholder="Tên nhà hàng"
+              />
+              <p className="text-sm text-on-surface-variant">{totalItems} món trong menu</p>
+            </div>
+            <Button onClick={onExport} variant="primary" size="sm">
+              Xuất Menu
+            </Button>
+          </div>
+        </div>
+      </div>
+
+      {/* Main Content */}
+      <div className="max-w-6xl mx-auto px-6 py-8">
+        {/* Action Buttons - Row 1: Back button and expand/collapse */}
+        <div className="flex items-center gap-3 mb-6">
+          <button
+            onClick={onBack}
+            className="flex items-center gap-2 px-4 py-2 text-on-surface-variant hover:text-primary hover:bg-primary/10 rounded-xl transition-colors border border-outline-variant/50"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            <span className="text-sm font-medium">Quay lại</span>
+          </button>
+          <div className="flex-1" />
+          <button
             onClick={() => {
               setExpandedCategories(new Set(data.categories.map((cat) => cat.id)))
             }}
-            variant="glass"
-            size="sm"
-            className="text-white/80 hover:text-white"
+            className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-on-surface-variant bg-surface-container-lowest hover:bg-surface-container-low border border-outline-variant/50 rounded-xl transition-colors"
           >
+            <ChevronRight className="w-4 h-4" />
             Mở tất cả
-          </Button>
-          <Button
+          </button>
+          <button
             onClick={() => {
               setExpandedCategories(new Set())
             }}
-            variant="glass"
-            size="sm"
-            className="text-white/80 hover:text-white"
+            className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-on-surface-variant bg-surface-container-lowest hover:bg-surface-container-low border border-outline-variant/50 rounded-xl transition-colors"
           >
-            Thu gọn tất cả
-          </Button>
-          <Button onClick={handleAddCategory} variant="default" gradient="purple-blue" glow>
-            <Plus className="w-4 h-4 mr-2" />
+            <ChevronRight className="w-4 h-4 -rotate-90" />
+            Thu gọn
+          </button>
+          <Button onClick={handleAddCategory} variant="primary" size="sm">
+            <Plus className="w-4 h-4 mr-1" />
             Thêm Nhóm Món
           </Button>
         </div>
 
-        {/* Categories with Collapsible */}
-        {data.categories.map((category) => {
-          const isExpanded = expandedCategories.has(category.id)
-          return (
-            <motion.div
-              key={category.id}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4 }}
-              className="mb-4"
-            >
-              {/* Category Header - Always visible */}
-              <div
-                className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-t-2xl px-5 py-4 flex items-center justify-between cursor-pointer hover:bg-white/15 transition-colors gap-3"
-                onClick={() => toggleCategoryExpand(category.id)}
+        {/* Categories */}
+        <div className="space-y-4">
+          {data.categories.map((category) => {
+            const isExpanded = expandedCategories.has(category.id)
+            return (
+              <motion.div
+                key={category.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3 }}
+                className="bg-surface-container-lowest rounded-2xl overflow-hidden shadow-sm"
               >
-                <div className="flex items-center gap-3 flex-1">
+                {/* Category Header */}
+                <div
+                  className="px-5 py-4 flex items-center gap-3 cursor-pointer hover:bg-surface-container-low transition-colors"
+                  onClick={() => toggleCategoryExpand(category.id)}
+                >
                   <motion.div
                     animate={{ rotate: isExpanded ? 90 : 0 }}
                     transition={{ duration: 0.2 }}
+                    className="w-8 h-8 flex items-center justify-center rounded-lg bg-surface-container-high text-on-surface-variant"
                   >
-                    <ChevronRight className="w-5 h-5 text-white/80" />
+                    <ChevronRight className="w-5 h-5" />
                   </motion.div>
-                  <Input
-                    variant="glass"
+                  <input
+                    type="text"
                     value={category.categoryName}
                     onChange={(e) => handleCategoryNameChange(category.id, e.target.value)}
                     onClick={(e) => e.stopPropagation()}
-                    className="text-lg font-semibold flex-1 bg-transparent border-0 h-auto p-0 text-white"
+                    className="flex-1 text-lg font-semibold text-on-surface bg-transparent border-0 outline-none"
                   />
-                  <span className="text-sm text-white/70 bg-purple-500/20 px-3 py-1.5 rounded-full">
-                    {category.items.length} món
-                  </span>
+                  <div className="flex gap-2" onClick={(e) => e.stopPropagation()}>
+                    <button
+                      onClick={() => handleAddItem(category.id)}
+                      className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-on-surface-variant hover:text-primary hover:bg-primary/10 rounded-lg transition-colors border border-outline-variant/30"
+                    >
+                      <Plus className="w-4 h-4" />
+                      Thêm
+                    </button>
+                    <button
+                      onClick={() => handleDeleteCategory(category.id)}
+                      className="p-2 text-on-surface-variant hover:text-error hover:bg-error/10 rounded-lg transition-colors border border-outline-variant/30"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
                 </div>
-                <div className="flex gap-2" onClick={(e) => e.stopPropagation()}>
-                  <Button
-                    onClick={() => handleAddItem(category.id)}
-                    variant="glass"
-                    size="sm"
-                    className="text-white hover:text-white"
-                  >
-                    <Plus className="w-4 h-4 mr-1" />
-                    Thêm
-                  </Button>
-                  <Button
-                    onClick={() => handleDeleteCategory(category.id)}
-                    size="md"
-                    variant="default"
-                    className="bg-red-600 hover:bg-red-700 text-white"
-                  >
-                    Xóa
-                  </Button>
-                </div>
-              </div>
 
-              {/* Expanded Content */}
-              <AnimatePresence>
-                {isExpanded && (
-                  <motion.div
-                    initial={{ opacity: 0, height: 0 }}
-                    animate={{ opacity: 1, height: "auto" }}
-                    exit={{ opacity: 0, height: 0 }}
-                    transition={{ duration: 0.3 }}
-                    className="border border-t-0 border-white/20 rounded-b-2xl overflow-hidden"
-                  >
-                    <div className="space-y-0 divide-y divide-white/10">
-                      {category.items.map((item) => (
-                        <Card
-                          key={item.id}
-                          variant="glass"
-                          className="rounded-none border-0 border-b border-white/10 hover:bg-white/5"
-                        >
-                          <CardContent className="p-4">
-                            <div className="flex gap-3 items-center">
-                              <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-3">
-                                <div>
-                                  <Input
-                                    variant="glass"
-                                    label="Tên món"
-                                    value={item.name}
-                                    onChange={(e) =>
-                                      handleItemChange(
-                                        category.id,
-                                        item.id,
-                                        "name",
-                                        e.target.value
-                                      )
-                                    }
-                                    className="text-white"
-                                  />
-                                </div>
-                                <div>
-                                  <Input
-                                    variant="glass"
-                                    label="Giá"
-                                    value={item.price}
-                                    onChange={(e) =>
-                                      handleItemChange(
-                                        category.id,
-                                        item.id,
-                                        "price",
-                                        e.target.value
-                                      )
-                                    }
-                                    className="text-white"
-                                  />
-                                </div>
-                              </div>
-
-                              <Button
-                                variant="ghost"
-                                size="md"
-                                onClick={() => handleDeleteItem(category.id, item.id)}
-                                className="text-red-400 hover:text-red-300 hover:bg-red-500/10"
-                              >
-                                <Trash2 className="w-5 h-5" />
-                              </Button>
+                {/* Expanded Content */}
+                <AnimatePresence>
+                  {isExpanded && (
+                    <motion.div
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: "auto" }}
+                      exit={{ opacity: 0, height: 0 }}
+                      transition={{ duration: 0.2 }}
+                      className="border-t border-outline-variant/20"
+                    >
+                      <div className="divide-y divide-outline-variant/10">
+                        {category.items.map((item) => (
+                          <div
+                            key={item.id}
+                            className="px-5 py-4 flex items-center gap-4 hover:bg-surface-container-low transition-colors"
+                          >
+                            <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-4">
+                              <input
+                                type="text"
+                                value={item.name}
+                                onChange={(e) =>
+                                  handleItemChange(category.id, item.id, "name", e.target.value)
+                                }
+                                className="text-on-surface bg-transparent border-0 outline-none text-base"
+                                placeholder="Tên món"
+                              />
+                              <input
+                                type="text"
+                                value={item.price}
+                                onChange={(e) =>
+                                  handleItemChange(category.id, item.id, "price", e.target.value)
+                                }
+                                className="text-on-surface bg-transparent border-0 outline-none text-base"
+                                placeholder="Giá"
+                              />
                             </div>
-                          </CardContent>
-                        </Card>
-                      ))}
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </motion.div>
-          )
-        })}
+                            <button
+                              onClick={() => handleDeleteItem(category.id, item.id)}
+                              className="p-2 text-on-surface-variant hover:text-error hover:bg-error/10 rounded-lg transition-colors"
+                            >
+                              <Trash2 className="w-5 h-5" />
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </motion.div>
+            )
+          })}
+        </div>
 
         {/* Empty State */}
         {data.categories.length === 0 && (
           <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
+            initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="text-center py-16 bg-white/5 backdrop-blur-md border-2 border-dashed border-white/20 rounded-3xl"
+            className="text-center py-16 bg-surface-container-lowest rounded-3xl"
           >
-            <p className="text-white/70 text-lg mb-4">Chưa có nhóm món nào</p>
-            <Button onClick={handleAddCategory} variant="default" gradient="purple-blue" glow>
+            <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center mx-auto mb-4">
+              <Search className="w-8 h-8 text-primary" />
+            </div>
+            <p className="text-on-surface-variant text-lg mb-4">Chưa có nhóm món nào</p>
+            <Button onClick={handleAddCategory} variant="primary">
               <Plus className="w-4 h-4 mr-2" />
               Thêm Nhóm Món Đầu Tiên
             </Button>
           </motion.div>
         )}
 
-        {/* Footer Actions */}
-        <div className="flex gap-3 mt-8 pt-6 border-t border-white/10">
-          <Button
-            variant="glass"
-            onClick={onBack}
-            className="text-white/80 hover:text-white"
-          >
-            <ChevronLeft className="w-4 h-4 mr-2" />
-            Quay Lại
-          </Button>
+        {/* Footer Action */}
+        <div className="mt-8 pt-6 border-t border-outline-variant/20">
           <Button
             onClick={onExport}
-            variant="default"
-            gradient="blue-cyan"
-            glow
-            className="flex-1 px-8 py-3 text-lg"
+            variant="primary"
+            className="w-full py-4 text-base"
+            size="lg"
           >
             Tiếp Tục Xuất Menu
+            <ChevronRight className="w-5 h-5 ml-2" />
           </Button>
         </div>
       </div>
-    </div >
+    </div>
   )
 }

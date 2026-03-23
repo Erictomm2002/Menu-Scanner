@@ -46,16 +46,17 @@ export function DiscountSection({
             <div className="w-6 h-6 rounded-lg bg-rose-100 flex items-center justify-center">
               <Percent className="w-3.5 h-3.5 text-rose-600" aria-hidden="true" />
             </div>
-            <span className="text-sm font-bold text-primary">
-              C. CHIẾT KHẤU
+            <span className="text-xs lg:text-sm font-bold text-primary uppercase tracking-wider">
+              <span className="hidden lg:inline">C. CHIẾT KHẤU</span>
+              <span className="lg:hidden">Chiết khấu</span>
             </span>
           </div>
         </div>
-        <div className="p-6">
+        <div className="p-4 lg:p-6">
           <Button
             variant="outline"
             onClick={handleAddDiscount}
-            className="w-full border-dashed border-2 border-slate-300 text-slate-600 hover:text-primary hover:border-primary hover:bg-blue-50/30 py-3"
+            className="w-full border-dashed border-2 border-slate-300 text-slate-600 hover:text-primary hover:border-primary hover:bg-blue-50/30 py-2 lg:py-3"
           >
             <Plus className="w-4 h-4 mr-2" aria-hidden="true" />
             Thêm chiết khấu
@@ -73,8 +74,9 @@ export function DiscountSection({
           <div className="w-6 h-6 rounded-lg bg-rose-100 flex items-center justify-center">
             <Percent className="w-3.5 h-3.5 text-rose-600" aria-hidden="true" />
           </div>
-          <span className="text-sm font-bold text-primary">
-            C. CHIẾT KHẤU
+          <span className="text-xs lg:text-sm font-bold text-primary uppercase tracking-wider">
+            <span className="hidden lg:inline">C. CHIẾT KHẤU</span>
+            <span className="lg:hidden">Chiết khấu</span>
           </span>
         </div>
       </div>

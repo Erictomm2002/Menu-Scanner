@@ -1,39 +1,112 @@
 @import "tailwindcss";
 
+/* iPOS Kit Design System - Soft Editorial Minimalism */
 :root {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(0.99 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.45 0.18 255);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.5 0.05 280);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.94 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.52 0.22 265);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.62 0.2 25);
-  --destructive-foreground: oklch(0.985 0 0);
-  --border: oklch(0.85 0 0);
-  --input: oklch(0.96 0 0);
-  --ring: oklch(0.45 0.18 255);
-  --chart-1: oklch(0.45 0.18 255);
-  --chart-2: oklch(0.6 0.15 200);
-  --chart-3: oklch(0.5 0.1 180);
-  --chart-4: oklch(0.52 0.22 265);
-  --chart-5: oklch(0.48 0.18 240);
-  --radius: 0.625rem;
-  --sidebar: oklch(0.99 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.45 0.18 255);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.94 0 0);
-  --sidebar-accent-foreground: oklch(0.145 0 0);
-  --sidebar-border: oklch(0.92 0 0);
-  --sidebar-ring: oklch(0.45 0.18 255);
+  /* Primary Teal Palette */
+  --primary: #006977;
+  --primary-dim: #005c68;
+  --primary-container: #94edff;
+  --on-primary: #edfcff;
+  --on-primary-container: #005965;
+  --on-primary-fixed: #00444e;
+  --on-primary-fixed-variant: #006370;
+
+  /* Secondary */
+  --secondary: #4a6463;
+  --secondary-container: #cce8e7;
+  --on-secondary: #e2fefd;
+  --on-secondary-container: #3d5656;
+  --secondary-fixed: #cce8e7;
+  --secondary-fixed-dim: #bedad9;
+
+  /* Tertiary */
+  --tertiary: #3a647d;
+  --tertiary-container: #b5e0fd;
+  --on-tertiary: #f4f9ff;
+  --on-tertiary-container: #255169;
+
+  /* Surfaces - Tonal Depth System (No lines, only color shifts) */
+  --surface: #f8f9fa;
+  --surface-bright: #f8f9fa;
+  --surface-container: #ebeef0;
+  --surface-container-high: #e5e9eb;
+  --surface-container-highest: #dee3e6;
+  --surface-container-low: #f1f4f5;
+  --surface-container-lowest: #ffffff;
+  --surface-dim: #d5dbdd;
+  --surface-tint: #006977;
+  --surface-variant: #dee3e6;
+
+  /* On Surfaces */
+  --on-surface: #2d3335;
+  --on-surface-variant: #5a6062;
+  --on-background: #2d3335;
+
+  /* Outline & Borders (Ghost borders only - 15% opacity) */
+  --outline: #767c7e;
+  --outline-variant: #adb3b5;
+
+  /* Error */
+  --error: #a83836;
+  --error-container: #fa746f;
+  --on-error: #fff7f6;
+  --on-error-container: #6e0a12;
+  --error-dim: #67040d;
+
+  /* Inverse */
+  --inverse-on-surface: #9b9d9e;
+  --inverse-primary: #94edff;
+  --inverse-surface: #0c0f10;
+
+  /* Chart Colors */
+  --chart-1: #006977;
+  --chart-2: #4a6463;
+  --chart-3: #3a647d;
+  --chart-4: #006977;
+  --chart-5: #4a6463;
+
+  /* Background & Foreground */
+  --background: #f8f9fa;
+  --foreground: #2d3335;
+
+  /* Card */
+  --card: #ffffff;
+  --card-foreground: #2d3335;
+
+  /* Popover */
+  --popover: #ffffff;
+  --popover-foreground: #2d3335;
+
+  /* Muted */
+  --muted: #ebeef0;
+  --muted-foreground: #5a6062;
+
+  /* Accent */
+  --accent: #006977;
+  --accent-foreground: #edfcff;
+
+  /* Destructive */
+  --destructive: #a83836;
+  --destructive-foreground: #fff7f6;
+
+  /* Input & Ring */
+  --input: #e5e9eb;
+  --ring: #006977;
+
+  /* Radius */
+  --radius: 1rem;
+  --sidebar: #ffffff;
+  --sidebar-foreground: #2d3335;
+  --sidebar-primary: #006977;
+  --sidebar-primary-foreground: #edfcff;
+  --sidebar-accent: #f1f4f5;
+  --sidebar-accent-foreground: #2d3335;
+  --sidebar-border: #ebeef0;
+  --sidebar-ring: #006977;
+
+  /* Typography */
+  --font-headline: 'Manrope', sans-serif;
+  --font-body: 'Inter', sans-serif;
 }
 
 .dark {

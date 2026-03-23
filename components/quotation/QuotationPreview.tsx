@@ -45,6 +45,7 @@ interface QuotationPreviewProps {
   isSaving?: boolean;
   isExporting?: boolean;
   isExportingPdf?: boolean;
+  onOpenMobileProductSheet?: () => void;
 }
 
 export function QuotationPreview({
@@ -69,6 +70,7 @@ export function QuotationPreview({
   isSaving = false,
   isExporting = false,
   isExportingPdf = false,
+  onOpenMobileProductSheet,
 }: QuotationPreviewProps) {
   // Handle parent-child deletion when removing an item
   const handleItemRemove = (index: number) => {
@@ -150,12 +152,12 @@ export function QuotationPreview({
 
   return (
     <section
-      className="flex-1 p-8 bg-slate-50 overflow-y-auto"
+      className="flex-1 p-4 lg:p-8 bg-slate-50 overflow-y-auto"
       aria-label="Xem trước báo giá"
     >
-      <div className="max-w-5xl mx-auto bg-white shadow-xl rounded-xl border border-slate-300 flex flex-col min-h-full">
-        {/* Preview Header */}
-        <div className="p-6 border-b border-slate-200 bg-slate-50/50 rounded-t-xl flex justify-between items-center">
+      <div className="max-w-5xl mx-auto bg-white lg:shadow-xl lg:rounded-xl lg:border lg:border-slate-300 flex flex-col min-h-full">
+        {/* Preview Header - Desktop Only */}
+        <div className="hidden lg:block p-6 border-b border-slate-200 bg-slate-50/50 rounded-t-xl flex justify-between items-center">
           <div>
             <h2 className="text-2xl font-semibold text-slate-900">
               Xem trước báo giá
@@ -172,7 +174,7 @@ export function QuotationPreview({
           </div>
         </div>
 
-        <div className="p-8 pb-4 space-y-8 flex-1">
+        <div className="p-4 lg:p-8 pb-32 lg:pb-4 space-y-6 lg:space-y-8 flex-1">
           {/* Customer Info Form */}
           <QuotationForm
             customerName={customerName}
@@ -190,8 +192,9 @@ export function QuotationPreview({
             {/* Software Items */}
             {softwareItems.length > 0 && (
               <>
-                <div className="bg-slate-100/50 py-2 px-4 text-sm font-bold text-primary">
-                  A. PHẦN MỀM
+                <div className="bg-slate-100/50 py-2 px-4 text-xs lg:text-sm font-bold text-primary uppercase tracking-wider">
+                  <span className="hidden lg:inline">A. PHẦN MỀM</span>
+                  <span className="lg:hidden">Phần mềm</span>
                 </div>
                 <div className="divide-y divide-slate-200">
                   {softwareItems.map((parentItem) => {
@@ -217,8 +220,9 @@ export function QuotationPreview({
             {/* Hardware Items */}
             {hardwareItems.length > 0 && (
               <>
-                <div className="bg-slate-100/50 py-2 px-4 text-sm font-bold text-primary">
-                  B. PHẦN CỨNG
+                <div className="bg-slate-100/50 py-2 px-4 text-xs lg:text-sm font-bold text-primary uppercase tracking-wider">
+                  <span className="hidden lg:inline">B. PHẦN CỨNG</span>
+                  <span className="lg:hidden">Phần cứng</span>
                 </div>
                 <div className="divide-y divide-slate-200">
                   {hardwareItems.map((parentItem) => {
@@ -243,15 +247,43 @@ export function QuotationPreview({
 
             {/* Empty State */}
             {items.length === 0 && (
-              <div className="text-center py-12">
-                <FileText
-                  className="w-16 h-16 text-slate-400 mx-auto mb-4"
-                  aria-hidden="true"
-                />
-                <p className="text-slate-700">Chưa có sản phẩm nào</p>
-                <p className="text-slate-500 text-sm mt-2">
-                  Chọn sản phẩm từ sidebar bên trái để thêm vào báo giá
-                </p>
+              <div className="text-center py-12 px-4">
+                {/* Mobile Empty State */}
+                <div className="lg:hidden flex flex-col items-center justify-center min-h-[50vh]">
+                  <div className="w-48 h-48 bg-primary/5 rounded-full blur-3xl opacity-50 mb-6" />
+                  <div className="w-32 h-32 mb-6 flex items-center justify-center">
+                    <FileText className="w-24 h-24 text-outline/50" />
+                  </div>
+                  <h3 className="text-2xl font-extrabold text-on-surface mb-3">
+                    Chưa có sản phẩm
+                  </h3>
+                  <p className="text-on-surface-variant leading-relaxed max-w-[280px] opacity-70 mb-8">
+                    Bắt đầu bằng việc thêm các sản phẩm đầu tiên vào bảng báo giá của bạn.
+                  </p>
+                  {onOpenMobileProductSheet && (
+                    <button
+                      onClick={onOpenMobileProductSheet}
+                      className="w-full max-w-xs h-14 bg-gradient-to-br from-primary to-primary-container text-on-primary rounded-xl font-bold shadow-lg shadow-primary/20 active:scale-95 transition-all flex items-center justify-center gap-2"
+                    >
+                      <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
+                      </svg>
+                      Thêm sản phẩm
+                    </button>
+                  )}
+                </div>
+
+                {/* Desktop Empty State */}
+                <div className="hidden lg:block">
+                  <FileText
+                    className="w-16 h-16 text-slate-400 mx-auto mb-4"
+                    aria-hidden="true"
+                  />
+                  <p className="text-slate-700">Chưa có sản phẩm nào</p>
+                  <p className="text-slate-500 text-sm mt-2">
+                    Chọn sản phẩm từ sidebar bên trái để thêm vào báo giá
+                  </p>
+                </div>
               </div>
             )}
           </div>
@@ -265,8 +297,8 @@ export function QuotationPreview({
           />
         </div>
 
-        {/* Summary Section */}
-        <div className="flex justify-end p-4 pr-8 shadow-lg">
+        {/* Summary Section - Desktop Only (Mobile has sticky footer) */}
+        <div className="hidden lg:flex justify-end p-4 pr-8 shadow-lg">
           <QuotationSummary
             softwareTotal={softwareTotal}
             hardwareTotal={hardwareTotal}
@@ -275,16 +307,18 @@ export function QuotationPreview({
           />
         </div>
 
-        {/* Footer Actions */}
-        <QuotationFooter
-          onExport={onExport}
-          onExportPdf={onExportPdf}
-          onSave={onSave}
-          isSaving={isSaving}
-          isExporting={isExporting}
-          isExportingPdf={isExportingPdf}
-          itemCount={items.length}
-        />
+        {/* Footer Actions - Desktop Only (Mobile has sticky footer) */}
+        <div className="hidden lg:block">
+          <QuotationFooter
+            onExport={onExport}
+            onExportPdf={onExportPdf}
+            onSave={onSave}
+            isSaving={isSaving}
+            isExporting={isExporting}
+            isExportingPdf={isExportingPdf}
+            itemCount={items.length}
+          />
+        </div>
       </div>
     </section>
   );

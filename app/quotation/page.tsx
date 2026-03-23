@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { QuotationSidebar } from "@/components/quotation/QuotationSidebar";
 import { QuotationPreview } from "@/components/quotation/QuotationPreview";
+import { MobileProductSheet } from "@/components/quotation/MobileProductSheet";
+import { MobileFooterSummary } from "@/components/quotation/MobileFooterSummary";
 import { SubproductSelectorModal } from "@/components/quotation/SubproductSelectorModal";
 import { QuotationItem, Quotation, ProductWithSubproducts, QuotationDiscount } from "@/types/quotation";
 import { calculateQuotationSummary } from "@/libs/quotation-calculator";
@@ -277,11 +279,14 @@ export default function QuotationPage() {
     }
   };
 
+  // Mobile state for bottom sheet
+  const [showMobileProductSheet, setShowMobileProductSheet] = useState(false);
+
   return (
     <main className="min-h-screen bg-[#f8fafc]">
-      {/* Header */}
-      <header className="sticky top-0 z-50 bg-white border-b border-slate-300">
-        <div className=" w-full px-6 py-4">
+      {/* Mobile Header - Fixed Top */}
+      <header className="lg:sticky top-0 z-50 bg-white/80 backdrop-blur-xl border-b border-slate-200 lg:border-b lg:border-slate-300 hidden lg:block">
+        <div className="w-full px-6 py-4">
           <div className="flex items-center justify-between">
             <Link href="/">
               <Button variant="ghost" size="sm">
@@ -308,6 +313,17 @@ export default function QuotationPage() {
         </div>
       </header>
 
+      {/* Mobile Top Bar - Always Visible on Mobile */}
+      <header className="lg:hidden fixed top-0 w-full z-50 bg-white/80 backdrop-blur-xl shadow-sm shadow-teal-900/5 flex items-center justify-between px-4 h-14">
+        <Link href="/" className="p-2 hover:bg-zinc-100 transition-colors active:scale-95 duration-200 rounded-full">
+          <ArrowLeft className="w-5 h-5 text-teal-700" />
+        </Link>
+        <h1 className="font-bold text-lg text-teal-800">Xuất Báo Giá</h1>
+        <Link href="/quotation/history" className="p-2 hover:bg-zinc-100 transition-colors active:scale-95 duration-200 rounded-full">
+          <FileText className="w-5 h-5 text-teal-700" />
+        </Link>
+      </header>
+
       {/* Message */}
       {message && (
         <div
@@ -321,37 +337,110 @@ export default function QuotationPage() {
         </div>
       )}
 
-      {/* Main Content - Split View */}
-      <div className="flex h-[calc(100vh-57px)]">
-        <QuotationSidebar
-          onAddItem={handleAddItem}
-          selectedItems={items}
-          onOpenSubproductModal={handleOpenSubproductModal}
-        />
-        <QuotationPreview
-          customerName={customerName}
-          customerPhone={customerPhone}
-          customerAddress={customerAddress}
-          customerModel={customerModel}
+      {/* Main Content */}
+      <div className="flex flex-col lg:flex-row min-h-screen">
+        {/* Desktop Sidebar - Hidden on Mobile */}
+        <div className="hidden lg:block">
+          <QuotationSidebar
+            onAddItem={handleAddItem}
+            selectedItems={items}
+            onOpenSubproductModal={handleOpenSubproductModal}
+          />
+        </div>
+
+        {/* Mobile Product Sheet Overlay */}
+        {showMobileProductSheet && (
+          <>
+            {/* Backdrop */}
+            <div
+              className="lg:hidden fixed inset-0 bg-on-surface/40 z-[60] backdrop-blur-[2px]"
+              onClick={() => setShowMobileProductSheet(false)}
+            />
+            {/* Bottom Sheet */}
+            <div className="lg:hidden fixed inset-x-0 bottom-0 z-[70] bg-surface-container-lowest rounded-t-3xl shadow-[0_-10px_40px_rgba(0,0,0,0.1)] flex flex-col max-h-[85vh]">
+              {/* Handle */}
+              <div className="flex flex-col items-center pt-3 pb-2">
+                <div className="w-8 h-1 bg-outline-variant/30 rounded-full mb-4" />
+              </div>
+              <div className="px-4 pb-4">
+                <MobileProductSheet
+                  onAddItem={handleAddItem}
+                  selectedItems={items}
+                  onOpenSubproductModal={handleOpenSubproductModal}
+                  onClose={() => setShowMobileProductSheet(false)}
+                />
+              </div>
+            </div>
+          </>
+        )}
+
+        {/* Main Preview Area */}
+        <div className="flex-1 pt-14 lg:pt-0 pb-32 lg:pb-0">
+          <QuotationPreview
+            customerName={customerName}
+            customerPhone={customerPhone}
+            customerAddress={customerAddress}
+            customerModel={customerModel}
+            items={items}
+            discounts={discounts}
+            onCustomerNameChange={setCustomerName}
+            onCustomerPhoneChange={setCustomerPhone}
+            onCustomerAddressChange={setCustomerAddress}
+            onCustomerModelChange={setCustomerModel}
+            onItemUpdate={handleItemUpdate}
+            onItemRemove={handleRemoveItem}
+            onAddDiscount={handleAddDiscount}
+            onUpdateDiscount={handleUpdateDiscount}
+            onRemoveDiscount={handleRemoveDiscount}
+            onExport={handleExport}
+            onExportPdf={handleExportPdf}
+            onSave={handleSave}
+            isSaving={isSaving}
+            isExporting={isExporting}
+            isExportingPdf={isExportingPdf}
+            onOpenMobileProductSheet={() => setShowMobileProductSheet(true)}
+          />
+        </div>
+      </div>
+
+      {/* Mobile Sticky Footer with Actions */}
+      <div className="lg:hidden fixed bottom-0 inset-x-0 z-50 bg-white/95 backdrop-blur-2xl rounded-t-3xl shadow-[0_-10px_40px_rgba(0,0,0,0.08)] border-t border-outline-variant/10">
+        <MobileFooterSummary
           items={items}
           discounts={discounts}
-          onCustomerNameChange={setCustomerName}
-          onCustomerPhoneChange={setCustomerPhone}
-          onCustomerAddressChange={setCustomerAddress}
-          onCustomerModelChange={setCustomerModel}
-          onItemUpdate={handleItemUpdate}
-          onItemRemove={handleRemoveItem}
-          onAddDiscount={handleAddDiscount}
-          onUpdateDiscount={handleUpdateDiscount}
-          onRemoveDiscount={handleRemoveDiscount}
           onExport={handleExport}
           onExportPdf={handleExportPdf}
           onSave={handleSave}
+          onOpenProductSheet={() => setShowMobileProductSheet(true)}
           isSaving={isSaving}
           isExporting={isExporting}
           isExportingPdf={isExportingPdf}
         />
       </div>
+
+      {/* Mobile Bottom Navigation */}
+      <nav className="lg:hidden fixed bottom-0 w-full z-40 bg-white/80 backdrop-blur-xl shadow-[0_-10px_40px_rgba(0,0,0,0.06)] rounded-t-3xl flex justify-around items-center h-20 px-6 pb-safe">
+        <a className="flex flex-col items-center justify-center text-zinc-400 hover:text-teal-600 active:scale-90 transition-transform" href="/">
+          <svg className="w-6 h-6 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+          </svg>
+          <span className="text-[11px] font-medium">Sản phẩm</span>
+        </a>
+        <a className="flex flex-col items-center justify-center bg-teal-50 text-teal-700 rounded-2xl px-6 py-1 active:scale-90 transition-transform" href="/quotation">
+          <svg className="w-6 h-6 mb-1" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6z"/>
+            <path d="M14 3v5h5M16 13H8M16 17H8M10 9H8"/>
+          </svg>
+          <span className="text-[11px] font-bold">Báo giá</span>
+        </a>
+        <a className="flex flex-col items-center justify-center text-zinc-400 hover:text-teal-600 active:scale-90 transition-transform" href="/settings">
+          <svg className="w-6 h-6 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+          </svg>
+          <span className="text-[11px] font-medium">Cài đặt</span>
+        </a>
+      </nav>
 
       {/* Subproduct Selector Modal */}
       {selectedProductForSubproducts && (
