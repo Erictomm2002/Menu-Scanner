@@ -353,11 +353,11 @@ export default function QuotationPage() {
           <>
             {/* Backdrop */}
             <div
-              className="lg:hidden fixed inset-0 bg-on-surface/40 z-[60] backdrop-blur-[2px]"
+              className="lg:hidden fixed inset-0 bg-black/40 z-[60]"
               onClick={() => setShowMobileProductSheet(false)}
             />
             {/* Bottom Sheet */}
-            <div className="lg:hidden fixed inset-x-0 bottom-0 z-[70] bg-surface-container-lowest rounded-t-3xl shadow-[0_-10px_40px_rgba(0,0,0,0.1)] flex flex-col max-h-[85vh]">
+            <div className="lg:hidden fixed inset-x-0 bottom-0 z-[70] bg-white rounded-t-3xl shadow-[0_-10px_40px_rgba(0,0,0,0.1)] flex flex-col max-h-[85vh]">
               {/* Handle */}
               <div className="flex flex-col items-center pt-3 pb-2">
                 <div className="w-8 h-1 bg-outline-variant/30 rounded-full mb-4" />
@@ -404,7 +404,7 @@ export default function QuotationPage() {
       </div>
 
       {/* Mobile Sticky Footer with Actions */}
-      <div className="lg:hidden fixed bottom-0 inset-x-0 z-50 bg-white/95 backdrop-blur-2xl rounded-t-3xl shadow-[0_-10px_40px_rgba(0,0,0,0.08)] border-t border-outline-variant/10">
+      <div className="lg:hidden fixed bottom-0 inset-x-0 z-50 bg-white rounded-t-3xl shadow-[0_-10px_40px_rgba(0,0,0,0.08)] border-t border-slate-200">
         <MobileFooterSummary
           items={items}
           discounts={discounts}
@@ -419,7 +419,7 @@ export default function QuotationPage() {
       </div>
 
       {/* Mobile Bottom Navigation */}
-      <nav className="lg:hidden fixed bottom-0 w-full z-40 bg-white/80 backdrop-blur-xl shadow-[0_-10px_40px_rgba(0,0,0,0.06)] rounded-t-3xl flex justify-around items-center h-20 px-6 pb-safe">
+      <nav className="lg:hidden fixed bottom-0 w-full z-40 bg-white shadow-[0_-10px_40px_rgba(0,0,0,0.06)] rounded-t-3xl flex justify-around items-center h-20 px-6 pb-safe">
         <a className="flex flex-col items-center justify-center text-zinc-400 hover:text-teal-600 active:scale-90 transition-transform" href="/">
           <svg className="w-6 h-6 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
