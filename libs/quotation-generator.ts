@@ -312,6 +312,24 @@ export async function generateQuotationExcelPdf(
   // Use PDF-specific (narrower) column widths for A4 format
   worksheet.columns = PDF_COLUMN_WIDTHS;
 
+  // Explicit page setup to ensure PDF renders full width regardless of LibreOffice version
+  // This fixes the dev vs production difference where Railway's LibreOffice renders differently
+  worksheet.pageSetup = {
+    paperSize: 9, // A4 = 9 in ExcelJS
+    orientation: 'portrait',
+    fitToPage: true,
+    fitToWidth: 1,
+    fitToHeight: 0,
+    margins: {
+      left: 0.75,
+      right: 0.75,
+      top: 0.5,
+      bottom: 0.5,
+      header: 0.3,
+      footer: 0.3,
+    },
+  };
+
   // Remove product images from template but KEEP the logo (first image)
   removeTemplateProductImages(worksheet);
 
