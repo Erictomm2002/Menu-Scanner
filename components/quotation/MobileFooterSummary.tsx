@@ -57,7 +57,7 @@ export function MobileFooterSummary({
   const hasItems = items.length > 0;
 
   return (
-    <div className="p-4 space-y-4">
+    <div className="p-4 space-y-4 pb-[calc(5rem+env(safe-area-inset-bottom))]">
       {/* Summary Row */}
       {hasItems && (
         <div className="grid grid-cols-2 gap-y-2 text-sm">
