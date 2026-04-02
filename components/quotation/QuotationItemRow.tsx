@@ -97,12 +97,27 @@ export function QuotationItemRow({
             </button>
           </div>
 
-          <div className="text-right">
-            {item.is_free ? (
-              <span className="text-sm text-slate-500 line-through">Miễn phí</span>
-            ) : (
-              <span className="text-sm font-bold text-slate-900">{formatPrice(item.total_price)}</span>
-            )}
+          <div className="flex items-center justify-between w-full">
+            {/* Free checkbox */}
+            <label className="flex items-center gap-1.5 cursor-pointer group">
+              <input
+                type="checkbox"
+                checked={item.is_free || false}
+                onChange={handleToggleFree}
+                className="w-5 h-5 rounded border-slate-300 text-green-600 focus:ring-green-500 cursor-pointer"
+              />
+              <span className="text-xs text-slate-600 group-hover:text-slate-800">
+                Free
+              </span>
+            </label>
+
+            <div className="text-right">
+              {item.is_free ? (
+                <span className="text-sm text-slate-500 line-through">Miễn phí</span>
+              ) : (
+                <span className="text-sm font-bold text-slate-900">{formatPrice(item.total_price)}</span>
+              )}
+            </div>
           </div>
         </div>
       </div>
