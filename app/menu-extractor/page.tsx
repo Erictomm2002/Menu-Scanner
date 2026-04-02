@@ -9,8 +9,10 @@ import { MenuData, MenuCategory } from "@/types/menu"
 
 type AppStep = "upload" | "edit" | "export"
 
+const MAX_ID_LENGTH = 15
+
 const slugify = (text: string): string => {
-  return text
+  const slug = text
     .toString()
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "")
@@ -19,6 +21,7 @@ const slugify = (text: string): string => {
     .replace(/\s+/g, "-")
     .replace(/[^\w-]+/g, "")
     .replace(/--+/g, "-")
+  return slug.slice(0, MAX_ID_LENGTH)
 }
 
 export default function MenuExtractorPage() {
@@ -76,7 +79,8 @@ export default function MenuExtractorPage() {
               let finalId = newId
               let counter = 1
               while (combinedMenuData.categories.some((c) => c.id === finalId)) {
-                finalId = `${newId}-${counter}`
+                const suffix = `-${counter}`
+                finalId = `${newId.slice(0, MAX_ID_LENGTH - suffix.length)}${suffix}`
                 counter++
               }
               newCategory.id = finalId
