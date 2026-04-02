@@ -60,7 +60,7 @@ const CATEGORY_FILL: ExcelJS.Fill = {
 const COLUMN_WIDTHS = [
   { width: 25 }, // Product name (image) - reduced from 40
   { width: 35 }, // Description - reduced from 50
-  { width: 12 }, // Unit
+  { width: 15 }, // Unit - increased from 12
   { width: 10 }, // Quantity
   { width: 12 }, // Unit price
   { width: 12 }, // Total
@@ -70,7 +70,7 @@ const COLUMN_WIDTHS = [
 const PDF_COLUMN_WIDTHS = [
   { width: 22 }, // Product name - compact for PDF
   { width: 45 }, // Description - compact for PDF
-  { width: 12 }, // Unit
+  { width: 15 }, // Unit - increased from 12
   { width: 10 }, // Quantity
   { width: 15 }, // Unit price
   { width: 15 }, // Total
@@ -120,6 +120,15 @@ export async function generateQuotationExcel(
   }
 
   worksheet.columns = COLUMN_WIDTHS;
+
+  // Force all cells to use Arial font to ensure consistency
+  worksheet.eachRow((row) => {
+    row.eachCell((cell) => {
+      if (cell.font) {
+        cell.font = { ...cell.font, name: "Arial" };
+      }
+    });
+  });
 
   // Remove product images from template but KEEP the logo (first image)
   removeTemplateProductImages(worksheet);
@@ -311,6 +320,15 @@ export async function generateQuotationExcelPdf(
 
   // Use PDF-specific (narrower) column widths for A4 format
   worksheet.columns = PDF_COLUMN_WIDTHS;
+
+  // Force all cells to use Arial font to ensure consistency
+  worksheet.eachRow((row) => {
+    row.eachCell((cell) => {
+      if (cell.font) {
+        cell.font = { ...cell.font, name: "Arial" };
+      }
+    });
+  });
 
   // Explicit page setup to ensure PDF renders full width regardless of LibreOffice version
   // This fixes the dev vs production difference where Railway's LibreOffice renders differently
@@ -716,7 +734,7 @@ async function fillProductRowWithSubproducts(
   const unitCell = worksheet.getCell(`C${row}`);
   unitCell.value = item.unit;
   unitCell.font = { ...FONT_STYLES.NUMBER };
-  unitCell.alignment = { horizontal: "center", vertical: "middle" };
+  unitCell.alignment = { horizontal: "center", vertical: "middle", wrapText: true };
   unitCell.border = THIN_BORDER;
 
   // --- Column D: Quantity (center) ---
@@ -818,7 +836,7 @@ async function fillProductRowWithSubproductsForPdf(
   const unitCell = worksheet.getCell(`C${row}`);
   unitCell.value = item.unit;
   unitCell.font = { ...FONT_STYLES.NUMBER };
-  unitCell.alignment = { horizontal: "center", vertical: "middle" };
+  unitCell.alignment = { horizontal: "center", vertical: "middle", wrapText: true };
   unitCell.border = THIN_BORDER;
 
   // Quantity cell
@@ -914,7 +932,7 @@ function fillSubproductRow(
   const unitCell = worksheet.getCell(`C${row}`);
   unitCell.value = item.unit;
   unitCell.font = { ...FONT_STYLES.NUMBER };
-  unitCell.alignment = { horizontal: "center", vertical: "middle" };
+  unitCell.alignment = { horizontal: "center", vertical: "middle", wrapText: true };
   unitCell.border = THIN_BORDER;
 
   const qtyCell = worksheet.getCell(`D${row}`);
