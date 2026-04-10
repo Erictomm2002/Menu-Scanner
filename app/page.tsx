@@ -10,6 +10,7 @@ import {
   ShieldCheck,
   Headphones,
 } from "lucide-react"
+import UserMenu from "@/components/UserMenu"
 
 // Navigation Component
 function Navigation() {
@@ -27,15 +28,7 @@ function Navigation() {
 
           {/* Desktop Nav */}
           <div className="hidden md:flex items-center gap-8 font-headline font-semibold text-sm tracking-tight">
-            <a className="text-teal-700 font-bold border-b-2 border-teal-600" href="#">
-              Giới thiệu
-            </a>
-            <a className="text-slate-600 hover:text-teal-600 hover:bg-teal-50/50 transition-all duration-300" href="#">
-              Hướng dẫn sử dụng
-            </a>
-            <a className="text-slate-600 hover:text-teal-600 hover:bg-teal-50/50 transition-all duration-300" href="#">
-              Liên hệ
-            </a>
+            <UserMenu />
           </div>
         </div>
       </nav>
