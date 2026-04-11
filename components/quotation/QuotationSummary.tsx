@@ -114,14 +114,14 @@ export function QuotationFooter({
         {isExporting ? "Đang xuất..." : "Xuất Excel"}
       </Button>
 
-      <Button
+      {/* <Button
         variant="primary"
         onClick={onExportPdf}
         disabled={itemCount === 0 || isExportingPdf}
       >
         <FileText className="w-5 h-5" />
         {isExportingPdf ? "Đang xuất..." : "Xuất PDF"}
-      </Button>
+      </Button> */}
     </div>
   );
 }

@@ -126,8 +126,8 @@ export function MobileFooterSummary({
           </span>
         </button>
 
-        {/* PDF Button - Primary */}
-        <button
+        {/* PDF Button - Primary - Hidden temporarily */}
+        {/* <button
           onClick={onExportPdf}
           disabled={!hasItems || isExportingPdf}
           className={clsx(
@@ -141,7 +141,7 @@ export function MobileFooterSummary({
           <span className="text-[11px] font-bold uppercase tracking-tight">
             {isExportingPdf ? "..." : "PDF"}
           </span>
-        </button>
+        </button> */}
       </div>
     </div>
   );
