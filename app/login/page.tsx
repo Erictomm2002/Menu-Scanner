@@ -1,13 +1,15 @@
 "use client";
 
-import { useState } from "react";
-import { createClient } from "@/utils/supabase/client";
-import { Loader2 } from "lucide-react";
-import Link from "next/link";
+import { useState } from 'react'
+import { createClient } from '@/utils/supabase/client'
+import { Loader2 } from 'lucide-react'
+import Link from 'next/link'
+import { RegistrationRequestForm } from '@/components/access-denied/registration-request-form'
 
 export default function LoginPage() {
-  const [loading, setLoading] = useState(false);
-  const supabase = createClient();
+  const [loading, setLoading] = useState(false)
+  const [showRegistration, setShowRegistration] = useState(false)
+  const supabase = createClient()
 
   const handleGoogleLogin = async () => {
     setLoading(true);
@@ -23,6 +25,45 @@ export default function LoginPage() {
       setLoading(false);
     }
   };
+
+  if (showRegistration) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-teal-50 px-4 py-12">
+        <div className="w-full max-w-md">
+          {/* Logo */}
+          <div className="text-center mb-8">
+            <Link href="/" className="inline-flex items-center gap-1">
+              <span className="text-2xl font-extrabold tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-[#008080] to-[#20B2AA]">
+                iPOS
+              </span>
+              <span className="text-xl font-light text-slate-400">Kit</span>
+            </Link>
+          </div>
+
+          {/* Registration Card */}
+          <div className="bg-white rounded-2xl shadow-xl shadow-teal-900/10 border border-slate-100 overflow-hidden">
+            <div className="bg-gradient-to-r from-amber-50 to-orange-50 px-8 py-6 text-center border-b border-amber-100">
+              <div className="w-16 h-16 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg className="w-8 h-8 text-amber-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
+                </svg>
+              </div>
+              <h1 className="text-xl font-bold text-slate-800 mb-1">
+                Đăng ký sử dụng
+              </h1>
+              <p className="text-sm text-slate-600">
+                Vui lòng điền thông tin để được cấp quyền truy cập
+              </p>
+            </div>
+
+            <div className="px-8 py-6">
+              <RegistrationRequestForm onBack={() => setShowRegistration(false)} />
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-teal-50 to-cyan-50">
@@ -41,7 +82,7 @@ export default function LoginPage() {
         <button
           onClick={handleGoogleLogin}
           disabled={loading}
-          className="w-full flex items-center justify-center gap-3 px-6 py-4 bg-white border-2 border-slate-200 rounded-2xl font-bold text-lg hover:border-teal-300 hover:bg-teal-50/50 transition-all duration-300 disabled:opacity-50"
+          className="w-full flex items-center justify-center gap-3 px-6 py-4 bg-white border-2 border-slate-200 rounded-2xl font-bold text-lg hover:border-teal-300 hover:bg-teal-50/50 transition-all duration-300 disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 focus-visible:ring-offset-2"
         >
           {loading ? (
             <Loader2 className="w-6 h-6 animate-spin" />
@@ -69,6 +110,19 @@ export default function LoginPage() {
             </>
           )}
         </button>
+
+        {/* Registration Link */}
+        <div className="mt-6 p-4 bg-amber-50 border border-amber-200 rounded-xl">
+          <p className="text-sm text-amber-800 text-center">
+            Bạn chưa được duyệt tài khoản Google?{' '}
+            <button
+              onClick={() => setShowRegistration(true)}
+              className="font-semibold text-amber-900 underline hover:text-amber-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:ring-offset-2"
+            >
+              Nhấn vào đây để đề xuất
+            </button>
+          </p>
+        </div>
 
         {/* Footer */}
         <p className="text-center text-sm text-slate-400 mt-8">

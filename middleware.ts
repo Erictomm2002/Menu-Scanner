@@ -3,6 +3,8 @@ import { NextResponse, type NextRequest } from 'next/server'
 
 // Routes that require authentication
 const protectedRoutes = ['/menu-extractor', '/quotation', '/products']
+// Routes that require owner role
+const ownerRoutes = ['/admin']
 // Routes that should redirect to home if already logged in
 const authRoutes = ['/login', '/access-denied']
 
@@ -40,6 +42,7 @@ export async function middleware(request: NextRequest) {
 
   // Check if accessing protected route without auth
   const isProtectedRoute = protectedRoutes.some(route => pathname.startsWith(route))
+  const isOwnerRoute = ownerRoutes.some(route => pathname.startsWith(route))
   const isAuthRoute = authRoutes.some(route => pathname.startsWith(route))
 
   if (isProtectedRoute && !user) {
@@ -47,6 +50,20 @@ export async function middleware(request: NextRequest) {
     const url = new URL('/login', request.url)
     url.searchParams.set('redirect', pathname)
     return NextResponse.redirect(url)
+  }
+
+  if (isOwnerRoute && user) {
+    // Check if user is owner
+    const { data: allowedUser } = await supabase
+      .from('allowed_users')
+      .select('role')
+      .eq('email', user.email)
+      .eq('is_active', true)
+      .single()
+
+    if (!allowedUser || allowedUser.role !== 'owner') {
+      return NextResponse.redirect(new URL('/access-denied', request.url))
+    }
   }
 
   if (isAuthRoute && user) {
