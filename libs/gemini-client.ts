@@ -28,6 +28,7 @@ YÊU CẦU:
 5. Đọc kỹ toàn bộ menu, không bỏ sót món nào
 6. Nếu một món có 2 giá, hãy tạo ra 2 món mới với tên theo format "tên món (size 1)" và "tên món (size 2), nếu không có thông tin về size, hãy dùng cấu trúc tên món = "tên món + giá món". Vd: Trà sữa 15
 7. Gía để dạng số nguyên như 50000. Nếu giá chỉ ghi ví dụ như 120 thay vì 120000 thì hãy thêm 3 số 0 vào sau (120 -> 120000)
+8. Nếu tên món trong ảnh có cả tiếng anh và tiếng việt thì lưu tên theo format anh/việt nhé. Ví dụ: Egg coffee/ Cà phê trứng
 Hãy phân tích ảnh và trả về JSON
 `;
 
