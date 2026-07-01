@@ -28,6 +28,9 @@ function Navigation() {
 
           {/* Desktop Nav */}
           <div className="hidden md:flex items-center gap-8 font-headline font-semibold text-sm tracking-tight">
+            <Link href="/fabi-setup" className="text-slate-600 hover:text-primary transition-colors">
+              Khởi tạo quán
+            </Link>
             <UserMenu />
           </div>
         </div>
